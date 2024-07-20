@@ -49,7 +49,9 @@
                 <li class="has-children">
                     <a href="#">Category</a>
                     <ul class="dropdown">
-                        <li><a href="#categories">Urban Jeans</a></li>
+                        <li class="<?php if ($current_page == 'jeans.php') {
+                                        echo 'active';
+                                    } ?>"><a href="jeans.php">Urban Jeans</a></li>
                         <li><a href="#categories">Urban Shirts</a></li>
                         <li><a href="#categories">Urban T Shirts</a></li>
                     </ul>

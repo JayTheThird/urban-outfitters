@@ -35,7 +35,7 @@
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Shop</strong></div>
+          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">category <span class="mx-2 mb-0">/</span> jeans</strong></div>
         </div>
       </div>
     </div>
@@ -48,23 +48,11 @@
 
             <!-- Shop All -->
             <div class="row">
-              <div class="col-md-12 mb-5">
+              <div class="col-md-12 ">
                 <div class="float-md-left mb-4">
                   <h2 class="text-black h5">Shop All</h2>
                 </div>
-                <div class="d-flex">
-                  <div class="dropdown mr-1 ml-md-auto">
-                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Latest
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                      <a class="dropdown-item" href="#">Shirts</a>
-                      <a class="dropdown-item" href="#">Tshirts</a>
-                      <a class="dropdown-item" href="#">Jeans</a>
-                    </div>
-                  </div>
-
-                </div>
+              
               </div>
             </div>
             <!--  -->
@@ -158,19 +146,8 @@
           </div>
 
           <div class="col-md-3 order-1 mb-5 mb-md-0">
-            <!-- Categories tile -->
+              <!-- filter -->
             <div class="border p-4 rounded mb-4">
-              <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
-              <ul class="list-unstyled mb-0">
-                <li class="mb-1"><a href="#" class="d-flex"><span>Shirts </span> <span class="text-black ml-auto">(2,220)</span></a></li>
-                <li class="mb-1"><a href="#" class="d-flex"><span>Tshirts</span> <span class="text-black ml-auto">(2,550)</span></a></li>
-                <li class="mb-1"><a href="#" class="d-flex"><span>Jeans</span> <span class="text-black ml-auto">(2,124)</span></a></li>
-              </ul>
-            </div>
-            <!--  -->
-
-            <div class="border p-4 rounded mb-4">
-              <!--  -->
 
               <div class="mb-4">
                 <h3 class="mb-3 h6 text-uppercase text-black d-block">Size</h3>
@@ -202,25 +179,9 @@
               </div>
 
             </div>
+            <!--  -->
           </div>
         </div>
-
-        <!-- Categories -->
-        <div class="row">
-          <div class="col-md-12">
-            <div class="site-section site-blocks-2">
-              <div class="row justify-content-center text-center ">
-                <!-- <div class="pt-4"> -->
-                <h2 style="font-size: 36px; color : black;">Categories</h2>
-                <!-- </div> -->
-              </div>
-              <?php
-              include_once('./include/categories.php');
-              ?>
-            </div>
-          </div>
-        </div>
-        <!--  -->
 
       </div>
     </div>
