@@ -47,13 +47,17 @@
                                 echo 'active';
                             } ?>"><a href="index.php">Home</a></li>
                 <li class="has-children">
-                    <a href="#">Category</a>
+                    <a href="#category">Category</a>
                     <ul class="dropdown">
                         <li class="<?php if ($current_page == 'jeans.php') {
                                         echo 'active';
                                     } ?>"><a href="jeans.php">Urban Jeans</a></li>
-                        <li><a href="#categories">Urban Shirts</a></li>
-                        <li><a href="#categories">Urban T Shirts</a></li>
+                        <li class="<?php if ($current_page == 'shirt.php') {
+                                        echo 'active';
+                                    } ?>"><a href="shirt.php">Urban Shirts</a></li>
+                        <li class="<?php if ($current_page == 'tshirt.php') {
+                                        echo 'active';
+                                    } ?>"><a href="tshirt.php">Urban T Shirts</a></li>
                     </ul>
                 </li>
                 <li><a href="#big-sale">Big Sale!</a></li>
