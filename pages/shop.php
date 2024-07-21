@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+  <title>Urban Outfitters | Shop</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -33,9 +33,17 @@
     <!--  -->
 
     <!-- navigation -->
-    <?php
-    include_once('./include/navigation.php');
-    ?>
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">
+            <a href="index.html">home</a>
+            <span class="mx-2 mb-0">/</span>
+            <strong class="text-black">shop</strong>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--  -->
 
     <div class="site-section">
@@ -173,26 +181,31 @@
               <div class="mb-4">
                 <h3 class="mb-3 h6 text-uppercase text-black d-block">Size</h3>
                 <label for="s_sm" class="d-flex">
-                  <input type="checkbox" id="s_sm" class="mr-2 mt-1"> <span class="text-black">Small (2,319)</span>
+                  <input type="checkbox" id="s_sm" class="mr-2 mt-1"> <span class="text-black">Small
+                    (2,319)</span>
                 </label>
                 <label for="s_md" class="d-flex">
-                  <input type="checkbox" id="s_md" class="mr-2 mt-1"> <span class="text-black">Medium (1,282)</span>
+                  <input type="checkbox" id="s_md" class="mr-2 mt-1"> <span class="text-black">Medium
+                    (1,282)</span>
                 </label>
                 <label for="s_lg" class="d-flex">
-                  <input type="checkbox" id="s_lg" class="mr-2 mt-1"> <span class="text-black">Large (1,392)</span>
+                  <input type="checkbox" id="s_lg" class="mr-2 mt-1"> <span class="text-black">Large
+                    (1,392)</span>
                 </label>
               </div>
 
               <div class="mb-4">
                 <h3 class="mb-3 h6 text-uppercase text-black d-block">Color</h3>
                 <a href="#" class="d-flex color-item align-items-center">
-                  <span class="bg-danger color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Red (2,429)</span>
+                  <span class="bg-danger color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Red
+                    (2,429)</span>
                 </a>
                 <a href="#" class="d-flex color-item align-items-center">
                   <span class="bg-success color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Green (2,298)</span>
                 </a>
                 <a href="#" class="d-flex color-item align-items-center">
-                  <span class="bg-info color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Blue (1,075)</span>
+                  <span class="bg-info color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Blue
+                    (1,075)</span>
                 </a>
                 <a href="#" class="d-flex color-item align-items-center">
                   <span class="bg-primary color d-inline-block rounded-circle mr-2"></span> <span class="text-black">Purple (1,075)</span>
@@ -207,10 +220,10 @@
         <div class="row">
           <div class="col-md-12">
             <div class="site-section site-blocks-2">
-              <div class="row justify-content-center text-center ">
-                <!-- <div class="pt-4"> -->
-                <h2 style="font-size: 36px; color : black;">Categories</h2>
-                <!-- </div> -->
+              <div class="row justify-content-center">
+                <div class="col-md-7 site-section-heading text-center pt-4">
+                  <h2>Categories</h2>
+                </div>
               </div>
               <?php
               include_once('./include/categories.php');

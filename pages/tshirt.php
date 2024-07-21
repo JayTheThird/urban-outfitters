@@ -32,6 +32,7 @@
     ?>
     <!--  -->
 
+    <!-- Navigation -->
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
@@ -39,6 +40,7 @@
         </div>
       </div>
     </div>
+    <!--  -->
 
     <div class="site-section">
       <div class="container">
