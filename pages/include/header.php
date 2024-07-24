@@ -22,7 +22,7 @@
                             <li><a href="user_login.php"><span class="icon icon-person"></span></a></li>
                             <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                             <li>
-                                <a href="cart.html" class="site-cart">
+                                <a href="cart.php" class="site-cart">
                                     <span class="icon icon-shopping_cart"></span>
                                     <span class="count">0</span>
                                 </a>
