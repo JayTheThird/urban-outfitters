@@ -921,14 +921,13 @@ a:hover {
 }
 
 .site-blocks-table thead th {
-  padding: 30px;
+  /* padding: 30px; */
   text-align: center;
   border-width: 1px !important;
   vertical-align: middle;
   color: #212529;
   font-size: 18px;
 }
-
 .site-blocks-table td {
   padding: 20px;
   text-align: center;

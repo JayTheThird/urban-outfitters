@@ -52,7 +52,7 @@
                  </div>
 
                  <!-- Add to Cart Button -->
-                 <p><a href="cart.html" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+                 <p><a href="cart.php" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
              </div>
          </div>
      </div>
