@@ -54,11 +54,9 @@
         </li>
         <!--  -->
 
-
-
         <!-- Login -->
         <li class="nav-item">
-            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'pages-login.html') ? 'active' : ''; ?>" href="pages-login.html">
+            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'pages-login.html') ? 'active' : ''; ?>" href="admin_login.php">
                 <i class="bi bi-box-arrow-in-right"></i>
                 <span>Login</span>
             </a>
