@@ -80,7 +80,7 @@
           </div>
           <!--  -- >
 
-          <!-- cart totals -->
+          <!- cart totals -->
           <div class="col-md-6 pl-5">
             <div class="row justify-content-end">
               <div class="col-md-7">
