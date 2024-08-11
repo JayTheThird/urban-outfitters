@@ -117,7 +117,7 @@
 
             <!--Dashboard  -->
             <li class="nav-item">
-                <a class="nav-link " href="index.html">
+                <a class="nav-link " href="">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
@@ -126,7 +126,7 @@
 
             <!-- Orders -->
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="">
+                <a class="nav-link" href="orders.php">
                     <i class='bx bx-cart'></i><span>Orders</span></i>
                 </a>
             </li>
