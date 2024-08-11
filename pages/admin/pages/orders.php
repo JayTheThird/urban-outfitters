@@ -94,7 +94,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="./admin_login.php">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>
@@ -428,7 +428,7 @@
                                     <table class="table table-borderless">
                                         <thead>
                                             <tr>
-                                                <!-- <th scope="col">Preview</th> -->
+                                                <th scope="col">Preview</th>
                                                 <th scope="col">Product</th>
                                                 <th scope="col">Price</th>
                                                 <th scope="col">Sold</th>
@@ -437,7 +437,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <!-- <th scope="row"><a href="#"><img src="../images/products/f1.jpg" alt=""></a></th> -->
+                                                <th scope="row"><a href="#"><img src="../images/products/f1.jpg" alt=""></a></th>
                                                 <td><a href="#" class="text-primary fw-bold">Linen Shirts</a></td>
                                                 <td>₹ 64</td>
                                                 <td class="fw-bold">124</td>
