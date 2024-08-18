@@ -49,13 +49,13 @@
                                         <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                                     </div>
 
-                                    <form class="row g-3 needs-validation" novalidate>
+                                    <form class="row g-3 needs-validation" method="post" novalidate>
 
                                         <div class="col-12">
                                             <label for="yourUsername" class="form-label">Email</label>
                                             <div class="input-group has-validation">
                                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                <input type="email" name="username" class="form-control" id="yourUsername" required>
+                                                <input type="email" name="email" class="form-control" id="yourUsername" required>
                                                 <div class="invalid-feedback">Please enter your email.</div>
                                             </div>
                                         </div>
@@ -74,7 +74,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100" type="submit">Login</button>
+                                            <button class="btn btn-primary w-100" type="submit" name="submit">Login</button>
                                         </div>
                                         <div class="col-12">
                                             <p class="small mb-0">Don't have account? <a href="user_signup.php">Create an account</a></p>
@@ -113,3 +113,45 @@
 </body>
 
 </html>
+
+<?php
+include_once("../connection.php");
+include_once("../config.php");
+
+if (isset($_POST["submit"])) {
+
+    $email = mysqli_real_escape_string($conn, $_POST["email"]);
+    $password = mysqli_real_escape_string($conn, $_POST["password"]);
+
+    // search email if exist or not
+    $is_email_exist = "SELECT * FROM `users` WHERE `email` = '$email'";
+    $is_email_exist_query = mysqli_query($conn, $is_email_exist);
+
+    $email_count = mysqli_num_rows($is_email_exist_query);
+
+    if ($email_count) {
+        // extract user details
+        $account_details = mysqli_fetch_assoc($is_email_exist_query);
+
+        // checking user entered password with stored password 
+        $original_password = $account_details["password"];
+        $password_verify = password_verify($password, $original_password);
+
+        // is password correct then redirect to home page
+        if ($password_verify) {
+            echo "<script>alert('login successful'); 
+                      location.replace('index.php');
+              </script>";
+        } else {
+            echo "<script>
+                    alert('incorrect password');   
+              </script>";
+        }
+    } else {
+        // if email not registered 
+        echo "<script>alert('$email - not found, Register First!');</script>";
+    }
+}
+
+
+?>

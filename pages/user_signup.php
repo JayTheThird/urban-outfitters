@@ -48,22 +48,22 @@
                     <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3 needs-validation" method="post" novalidate>
                     <div class="col-12">
                       <label for="yourName" class="form-label">First name</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
+                      <input type="text" name="first_name" class="form-control" id="yourName" required>
                       <div class="invalid-feedback">Please, enter your first name!</div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Last name</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
+                      <input type="text" name="last_name" class="form-control" id="yourEmail" required>
                       <div class="invalid-feedback">Please, enter your Last name!</div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Contact Number</label>
-                      <input type="number" name="email" class="form-control" id="yourEmail" required>
+                      <input type="number" name="contact_number" class="form-control" id="yourEmail" required>
                       <div class="invalid-feedback">Please, enter contact number!</div>
                     </div>
 
@@ -71,7 +71,7 @@
                       <label for="yourUsername" class="form-label">Email</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
+                        <input type="email" name="email" class="form-control" id="yourUsername" required>
                         <div class="invalid-feedback">Please enter a valid Email adddress!</div>
 
                       </div>
@@ -85,13 +85,13 @@
 
                     <div class="col-12">
                       <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                        <input class="form-check-input" name="terms" type="checkbox" id="acceptTerms" required>
                         <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
                         <div class="invalid-feedback">You must agree before submitting.</div>
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                      <button class="btn btn-primary w-100" type="submit" name="submit">Create Account</button>
                     </div>
                     <div class="col-12">
                       <p class="small mb-0">Already have an account? <a href="user_login.php">Log in</a></p>
@@ -129,3 +129,82 @@
 </body>
 
 </html>
+
+<?php
+include_once("../connection.php");
+include_once("../config.php");
+
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+
+require('../vendor/autoload.php');
+
+
+
+if (isset($_POST['submit']) && isset($_POST['terms'])) {
+
+  // getting textfield values into variables
+  $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+  $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+  $contact_number = mysqli_real_escape_string($conn, $_POST['contact_number']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+  // password hashed
+  $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+  // search email if exist or not
+  $is_email_exist = "SELECT * FROM `users` WHERE `email` = '$email'";
+  $is_email_exist_query = mysqli_query($conn, $is_email_exist);
+
+  $email_count = mysqli_num_rows($is_email_exist_query);
+
+  if ($email_count > 0) {
+    echo "<script>alert('email already exist, do login instead');</script>";
+  } else {
+
+    try {
+      // if no email found then 
+      $create_user = "INSERT INTO `users`(`user_first_name`, `user_last_name`, `email`, `contact_number`, `password`) VALUES ('$first_name','$last_name','$email','$contact_number','$password_hash')";
+
+      $create_user_query = mysqli_query($conn, $create_user);
+
+      // sending email
+      $mail = new PHPMailer(true);
+
+      $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+      $mail->isSMTP();
+      $mail->Host       = 'smtp.gmail.com';
+      $mail->SMTPAuth   = true;
+      $mail->Username   = 'urbanoutfittersg25@gmail.com';
+      $mail->Password   = 'neeaymsxupnfmlow';
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+      $mail->Port       = 587;
+
+      //Recipients
+      $mail->setFrom('urbanoutfittersg25@gmail.com', 'Mailer');
+      $mail->addAddress($email);
+
+      //Content
+      $mail->isHTML(true);
+      $mail->Subject = 'Here is the subject';
+      $mail->Body    = '<b>Loda mail jo</b>';
+
+      $mail->send();
+
+      if ($create_user) {
+        echo "<script>alert('registration successful'); 
+                      location.replace('user_login.php');
+                      </script>";
+      } else {
+        echo "<script>alert('unexpected event occurred, please try again some time');</script>";
+      }
+    } catch (Exception $e) {
+      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+  }
+}
