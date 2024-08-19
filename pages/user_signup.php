@@ -153,6 +153,7 @@ if (isset($_POST['submit']) && isset($_POST['terms'])) {
   $password = mysqli_real_escape_string($conn, $_POST['password']);
 
   $email_message_body = "
+  <head>
   <style>
     @import url(https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css);
 
@@ -254,11 +255,9 @@ if (isset($_POST['submit']) && isset($_POST['terms'])) {
         font-weight: 600px;
     }
 </style>
-
+  </head>
+<body>
 <div class='wrapper'>
-
-
-    <!-- Email Content -->
     <div class='content'>
         <table>
             <tr>
@@ -269,7 +268,7 @@ if (isset($_POST['submit']) && isset($_POST['terms'])) {
             </tr>
             <tr>
                 <td>
-                    <a class='call-to-action' href='../index.php'>Start browsing</a>
+                    <a class='call-to-action' href='http://localhost/urban-outfitters/pages/index.php'>Start browsing</a>
                 </td>
             </tr>
             <tr>
@@ -284,6 +283,7 @@ if (isset($_POST['submit']) && isset($_POST['terms'])) {
         </table>
     </div>
 </div>
+</body>
 ";
 
 
