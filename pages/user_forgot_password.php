@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>UO - Login</title>
+    <title>UO - Forgot Password</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -46,7 +46,7 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="pt-1 pb-1">
-                                        <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                                        <h5 class="card-title text-center pb-0 fs-4">Change Password</h5>
                                     </div>
 
                                     <form class="row g-3 needs-validation" method="post" novalidate>
@@ -61,28 +61,14 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="yourPassword" class="form-label">Password</label>
-
-                                            <input type="password" name="password" class="form-control" id="yourPassword" required>
-                                            <div class="invalid-feedback">Please enter your password!</div>
-                                        </div>
-                                        <div class="col-12">
-                                            <p class="small mb-0">Didn't Remember <a href="user_forgot_password.php">Password?</a></p>
+                                            <p class="small mb-0">Remember Password <a href="user_login.php">Wan't to go back?</a></p>
                                         </div>
 
-                                        <div class="col-12">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-                                                <label class="form-check-label" for="rememberMe">Remember me</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <button class="btn btn-primary w-100" type="submit" name="submit">Login</button>
-                                        </div>
 
                                         <div class="col-12">
-                                            <p class="small mb-0">Don't have account? <a href="user_signup.php">Create an account</a></p>
+                                            <button class="btn btn-primary w-100" type="submit" name="submit">Send Email</button>
                                         </div>
+
                                     </form>
 
                                 </div>
@@ -122,38 +108,95 @@
 include_once("../connection.php");
 include_once("../config.php");
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+
+require('../vendor/autoload.php');
+
+// Send mail
+function sendMail($email, $reset_token)
+{
+    $Subject = "Password Reset Link From Urban Outfitter's";
+    $Body = "We Got a Request From you to Reset Your Password <br> Click The Link Below : <br> <a href='http://localhost/urban-outfitters/pages/user_update_password.php?email=$email&reset_token=$reset_token'>Reset Password</a>";
+    //Load Composer's autoloader
+
+
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'urbanoutfittersg25@gmail.com';
+        $mail->Password   = 'neeaymsxupnfmlow';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+
+        //Recipients
+        $mail->setFrom('urbanoutfittersg25@gmail.com', "Urban Outfitter's");
+        $mail->addAddress($email);
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = $Subject;
+        $mail->Body = $Body;
+
+
+        $mail->send();
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+}
+
 if (isset($_POST["submit"])) {
 
     $email = mysqli_real_escape_string($conn, $_POST["email"]);
-    $password = mysqli_real_escape_string($conn, $_POST["password"]);
+
 
     // search email if exist or not
     $is_email_exist = "SELECT * FROM `users` WHERE `email` = '$email'";
     $is_email_exist_query = mysqli_query($conn, $is_email_exist);
 
-    $email_count = mysqli_num_rows($is_email_exist_query);
 
-    if ($email_count) {
-        // extract user details
-        $account_details = mysqli_fetch_assoc($is_email_exist_query);
 
-        // checking user entered password with stored password 
-        $original_password = $account_details["password"];
-        $password_verify = password_verify($password, $original_password);
+    if ($is_email_exist_query) {
+        if (mysqli_num_rows($is_email_exist_query) == 1) {
+            // email found
+            $reset_token = bin2hex(random_bytes(16));
+            date_default_timezone_set('Asia/Kolkata');
+            $reset_date = date("y-m-d");
 
-        // is password correct then redirect to home page
-        if ($password_verify) {
-            echo "<script>alert('login successful'); 
-                      location.replace('index.php');
-              </script>";
+            // update query
+            $password_update = "UPDATE `users` SET `token`='$reset_token', `token_expire`='$reset_date' WHERE `email`='$email'";
+
+            if (mysqli_query($conn, $password_update) && sendMail($email, $reset_token)) {
+                echo
+                '<script>
+                        alert("Server Down Try Again letter");
+                        window.location.href = "user_login.php";
+                    </script>';
+            } else {
+                echo
+                '<script>
+                        alert("Password Reset Link Send To mail");
+                        window.location.href = "user_login.php";
+                    </script>';
+            }
         } else {
-            echo "<script>
-                    alert('incorrect password');   
-              </script>";
+            echo '<script>
+                    alert("Email Not Found!");
+                    window.location.href = "user_login.php";
+                </script>';
         }
     } else {
-        // if email not registered 
-        echo "<script>alert('$email - not found, Register First!');</script>";
+        echo '<script>
+                alert("Can Not Run Query");
+                window.location.href = "user_login.php";
+            </script>';
     }
 }
 

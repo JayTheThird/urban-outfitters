@@ -143,8 +143,6 @@ use PHPMailer\PHPMailer\Exception;
 
 require('../vendor/autoload.php');
 
-
-
 if (isset($_POST['submit']) && isset($_POST['terms'])) {
 
   // getting textfield values into variables
@@ -153,6 +151,142 @@ if (isset($_POST['submit']) && isset($_POST['terms'])) {
   $contact_number = mysqli_real_escape_string($conn, $_POST['contact_number']);
   $email = mysqli_real_escape_string($conn, $_POST['email']);
   $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+  $email_message_body = "
+  <style>
+    @import url(https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css);
+
+    body {
+        font-size: 16px;
+        background: #f6f6f5;
+        font-family: 'HK Grotesk', sans-serif;
+    }
+
+    p {
+        margin-top: 20px;
+        margin-bottom: 24px;
+        line-height: 1.5;
+        text-align: justify;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    a {
+        color: #000000;
+        font-weight: 600;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 567px;
+        margin: 32px auto;
+    }
+
+    .header {
+        padding: 24px 32px;
+    }
+
+    .content {
+        padding: 20px 32px;
+        background-color: #ffffff;
+    }
+
+    .footer {
+        padding: 20px 32px 24px;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+    }
+
+    .footer a {
+        font-weight: 600;
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    a.underline {
+        text-decoration: underline;
+    }
+
+    a.call-to-action {
+        background: #7971ea;
+        color: #ffffff;
+        padding: 16px 67px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600px;
+    }
+
+    .delivery-logo {
+        width: 200px;
+    }
+
+    .borderless-logo {
+        width: 75%;
+        max-width: 178px;
+    }
+
+    .social-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 4px;
+        text-align: right;
+    }
+
+    .social-icons td {
+        text-align: right;
+    }
+
+    .text-lg {
+        font-size: 24px;
+    }
+
+    .font-bold {
+        font-weight: 600px;
+    }
+</style>
+
+<div class='wrapper'>
+
+
+    <!-- Email Content -->
+    <div class='content'>
+        <table>
+            <tr>
+                <td>
+                    <p>Hello $first_name $last_name </p>
+                    <p>Congratulations! You just created a new Account with us.</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a class='call-to-action' href='../index.php'>Start browsing</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>If you don't know why you got this email, please get in touch with us here.</p>
+                    <p>
+                        Best regards, <br />
+                        Urban Outfitters.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+";
+
+
 
   // password hashed
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -186,13 +320,13 @@ if (isset($_POST['submit']) && isset($_POST['terms'])) {
       $mail->Port       = 587;
 
       //Recipients
-      $mail->setFrom('urbanoutfittersg25@gmail.com', 'Mailer');
+      $mail->setFrom('urbanoutfittersg25@gmail.com', "Urban Outfitter's");
       $mail->addAddress($email);
 
       //Content
       $mail->isHTML(true);
-      $mail->Subject = 'Here is the subject';
-      $mail->Body    = '<b>Loda mail jo</b>';
+      $mail->Subject = 'Welcome to UO Family';
+      $mail->Body    = $email_message_body;
 
       $mail->send();
 
