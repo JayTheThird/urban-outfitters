@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user_first_name'], $_SESSION['contact_number'])) {
+    header("location:index.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -137,12 +144,21 @@ if (isset($_POST["submit"])) {
         // extract user details
         $account_details = mysqli_fetch_assoc($is_email_exist_query);
 
+
+
         // checking user entered password with stored password 
         $original_password = $account_details["password"];
         $password_verify = password_verify($password, $original_password);
 
         // is password correct then redirect to home page
         if ($password_verify) {
+
+            // Storing values in session
+            $_SESSION['user_first_name'] = $account_details['user_first_name'];
+            $_SESSION['user_last_name'] = $account_details['user_last_name'];
+            $_SESSION['email'] = $account_details['email'];
+            $_SESSION['contact_number'] = $account_details['contact_number'];
+
             echo "<script>alert('login successful'); 
                       location.replace('index.php');
               </script>";

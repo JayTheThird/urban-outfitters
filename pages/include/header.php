@@ -19,7 +19,7 @@
                 <div class="col-6 col-md-4 order-3 order-md-3 text-right">
                     <div class="site-top-icons">
                         <ul>
-                            <li><a href="user_login.php"><span class="icon icon-person"></span></a></li>
+                            <li><a href="user_profile.php"><span class="icon icon-person"></span></a></li>
                             <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                             <li>
                                 <a href="cart.php" class="site-cart">
@@ -45,31 +45,31 @@
             ?>
             <ul class="site-menu js-clone-nav d-none d-md-block">
                 <li class="<?php if ($current_page == 'index.php') {
-                    echo 'active';
-                } ?>"><a href="index.php">Home</a></li>
+                                echo 'active';
+                            } ?>"><a href="index.php">Home</a></li>
                 <li class="has-children">
                     <a href="#category">Category</a>
                     <ul class="dropdown">
                         <li class="<?php if ($current_page == 'jeans.php') {
-                            echo 'active';
-                        } ?>"><a href="jeans.php">Urban Jeans</a></li>
+                                        echo 'active';
+                                    } ?>"><a href="jeans.php">Urban Jeans</a></li>
                         <li class="<?php if ($current_page == 'shirt.php') {
-                            echo 'active';
-                        } ?>"><a href="shirt.php">Urban Shirts</a></li>
+                                        echo 'active';
+                                    } ?>"><a href="shirt.php">Urban Shirts</a></li>
                         <li class="<?php if ($current_page == 'tshirt.php') {
-                            echo 'active';
-                        } ?>"><a href="tshirt.php">Urban T Shirts</a></li>
+                                        echo 'active';
+                                    } ?>"><a href="tshirt.php">Urban T Shirts</a></li>
                     </ul>
                 </li>
                 <li><a href="#big-sale">Big Sale!</a></li>
                 <li class="<?php if ($current_page == 'shop.php') {
-                    echo 'active';
-                } ?>"><a href="shop.php">Shop</a></li>
+                                echo 'active';
+                            } ?>"><a href="shop.php">Shop</a></li>
                 <li><a href="#">Catalogue</a></li>
                 <li><a href="#featured-products">New Arrivals</a></li>
                 <li class="<?php if ($current_page == 'contact.php') {
-                    echo 'active';
-                } ?>"><a href="contact.php">Contact</a></li>
+                                echo 'active';
+                            } ?>"><a href="contact.php">Contact</a></li>
             </ul>
         </div>
     </nav>
