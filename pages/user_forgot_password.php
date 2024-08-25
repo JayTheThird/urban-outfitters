@@ -119,7 +119,141 @@ require('../vendor/autoload.php');
 function sendMail($email, $reset_token)
 {
     $Subject = "Password Reset Link From Urban Outfitter's";
-    $Body = "We Got a Request From you to Reset Your Password <br> Click The Link Below : <br> <a href='http://localhost/urban-outfitters/pages/user_update_password.php?email=$email&reset_token=$reset_token'>Reset Password</a>";
+    // $Body = "We Got a Request From you to Reset Your Password <br> Click The Link Below : <br> <a href='http://localhost/urban-outfitters/pages/user_update_password.php?email=$email&reset_token=$reset_token'>Reset Password</a>";
+
+    $email_message_body = "
+  <head>
+  <style>
+    @import url(https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css);
+
+    body {
+        font-size: 16px;
+        background: #f6f6f5;
+        font-family: 'HK Grotesk', sans-serif;
+    }
+
+    p {
+        margin-top: 20px;
+        margin-bottom: 24px;
+        line-height: 1.5;
+        text-align: justify;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    a {
+        color: #000000;
+        font-weight: 600;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 567px;
+        margin: 32px auto;
+    }
+
+    .header {
+        padding: 24px 32px;
+    }
+
+    .content {
+        padding: 20px 32px;
+        background-color: #ffffff;
+    }
+
+    .footer {
+        padding: 20px 32px 24px;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+    }
+
+    .footer a {
+        font-weight: 600;
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    a.underline {
+        text-decoration: underline;
+    }
+
+    a.call-to-action {
+        background: #7971ea;
+        color: #ffffff;
+        padding: 16px 67px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600px;
+    }
+
+    .delivery-logo {
+        width: 200px;
+    }
+
+    .borderless-logo {
+        width: 75%;
+        max-width: 178px;
+    }
+
+    .social-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 4px;
+        text-align: right;
+    }
+
+    .social-icons td {
+        text-align: right;
+    }
+
+    .text-lg {
+        font-size: 24px;
+    }
+
+    .font-bold {
+        font-weight: 600px;
+    }
+</style>
+  </head>
+<body>
+<div class='wrapper'>
+    <div class='content'>
+        <table>
+            <tr>
+                <td>
+                    <p>Hello $email</p>
+                    <p>We Got a Request From you to Reset Your Password</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a class='call-to-action' href='http://localhost/urban-outfitters/pages/user_update_password.php?email=$email&reset_token=$reset_token'>Reset Password</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>If you don't know why you got this email, please get in touch with us here.</p>
+                    <p>
+                        Best regards, <br />
+                        Urban Outfitters.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+";
     //Load Composer's autoloader
 
 
@@ -143,7 +277,7 @@ function sendMail($email, $reset_token)
         //Content
         $mail->isHTML(true);
         $mail->Subject = $Subject;
-        $mail->Body = $Body;
+        $mail->Body = $email_message_body;
 
 
         $mail->send();
