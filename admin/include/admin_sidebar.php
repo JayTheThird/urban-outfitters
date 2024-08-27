@@ -19,6 +19,14 @@
         </li>
         <!--  -->
 
+        <!-- Add Categories -->
+        <li class="nav-item">
+            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'add_category.php') ? 'active' : ''; ?>" href="add_category.php">
+                <i class='bx bx-message-square-add'></i><span>Add Categories</span></i>
+            </a>
+        </li>
+        <!--  -->
+
         <!-- Add Products -->
         <li class="nav-item">
             <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'add_products.php') ? 'active' : ''; ?>" href="add_products.php">
