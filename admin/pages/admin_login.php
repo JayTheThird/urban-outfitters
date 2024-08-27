@@ -1,3 +1,14 @@
+<?php
+session_start();
+include_once("../connection.php");
+include_once("../config.php");
+
+
+if (isset($_SESSION['admin_name'])) {
+    header("location:admin_index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,35 +63,29 @@
 
                             <!-- fields -->
                             <div class="card mb-3">
-
                                 <div class="card-body">
-
-                                    <div class="pt-4 pb-2">
+                                    <div class="pt-1 pb-1">
                                         <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                                     </div>
 
-                                    <form class="row g-3 needs-validation" novalidate>
-
+                                    <form class="row g-3 needs-validation" method="post" novalidate>
                                         <div class="col-12">
-                                            <label for="yourUsername" class="form-label">ID</label>
+                                            <label for="yourUsername" class="form-label">Admin Name</label>
                                             <div class="input-group has-validation">
                                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                <input type="text" name="username" class="form-control" id="yourUsername" required>
-                                                <div class="invalid-feedback">Please enter your Unique id.</div>
+                                                <input type="text" name="admin_name" class="form-control" id="yourUsername" required>
+                                                <div class="invalid-feedback">Please enter Unique Admin Name.</div>
                                             </div>
                                         </div>
-
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
 
-                                            <input type="password" name="password" class="form-control" id="yourPassword" required>
+                                            <input type="password" name="admin_password" class="form-control" id="yourPassword" required>
                                             <div class="invalid-feedback">Please enter your password!</div>
                                         </div>
-
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100" type="submit">Login</button>
+                                            <button class="btn btn-primary w-100" type="submit" name="submit">Login</button>
                                         </div>
-
                                     </form>
 
                                 </div>
@@ -115,3 +120,59 @@
 </body>
 
 </html>
+
+<?php
+// making input felid filter so we can check if entered data is not malicious
+function inputFilter($Data)
+{
+    $Data = trim($Data);
+    $Data = stripslashes($Data);
+    $Data = htmlentities($Data);
+    return $Data;
+}
+
+if (isset($_POST['submit'])) {
+
+    # Filtering Data that is Entered By Admins
+    $admin_name = inputFilter($_POST['admin_name']);
+    $admin_password = inputFilter($_POST['admin_password']);
+
+    # prevent Mysqli injection (ignore Special Symbols)
+    $admin_unique_name = mysqli_real_escape_string($conn, $admin_name);
+    $admin_password = mysqli_real_escape_string($conn, $admin_password);
+
+    #query Template
+    $query = "SELECT * FROM `admin` WHERE `admin_name` = ? AND `password` = ?";
+
+    #prepared Statement
+    if ($prepared_Statement = mysqli_prepare($conn, $query)) {
+
+        #Binding Values To Template or Prepared Statement
+        mysqli_stmt_bind_param($prepared_Statement, "ss", $admin_name, $admin_password);
+
+        # Executing Prepared Statement
+        mysqli_stmt_execute($prepared_Statement);
+
+        # Transferring the Result of Execution in $prepared_Statement 
+        mysqli_stmt_store_result($prepared_Statement);
+
+        if (mysqli_stmt_num_rows($prepared_Statement) == 1) {
+            // echo "Details Matched";
+            $_SESSION['admin_name'] = $admin_name;
+            echo "<script>alert('login successful'); 
+                      location.replace('admin_index.php');
+              </script>";
+        } else {
+            echo "<script>
+              alert('Invalid Details');
+            </script>";
+        }
+        mysqli_stmt_close($prepared_Statement);
+    } else {
+        echo "<script>
+            alert('Can Not be Prepared');
+         </script>";
+    }
+}
+
+?>

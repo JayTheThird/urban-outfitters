@@ -4,7 +4,7 @@
 
         <!-- Dashboard -->
         <li class="nav-item">
-            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>" href="index.php">
+            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>" href="admin_index.php">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
@@ -54,13 +54,6 @@
         </li>
         <!--  -->
 
-        <!-- Login -->
-        <li class="nav-item">
-            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'pages-login.html') ? 'active' : ''; ?>" href="admin_login.php">
-                <i class="bi bi-box-arrow-in-right"></i>
-                <span>Login</span>
-            </a>
-        </li>
-        <!--  -->
+
     </ul>
 </aside>

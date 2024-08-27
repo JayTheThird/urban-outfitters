@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,17 +67,23 @@
 
         <section class="section profile">
             <div class="row">
-                <!-- profile photo -->
-                <div class="col-xl-4">
-                    <div class="card">
-                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                <?php
+                if (isset($_SESSION['admin_name'])) {
+                ?>
+                    <!-- profile photo -->
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                            <img src="../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                            <h2>Kevin Anderson</h2>
+                                <img src="../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                                <h2><?php echo "$_SESSION[admin_name]"; ?></h2>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!--  -->
+                    <!--  -->
+                <?php
+                }
+                ?>
 
 
                 <div class="col-xl-8">
@@ -98,27 +108,34 @@
                             </ul>
                             <div class="tab-content pt-2">
 
-                                <!-- profile info -->
-                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                <?php
+                                if (isset($_SESSION['admin_name'])) {
+                                ?>
+                                    <!-- profile info -->
+                                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
 
-                                    <h5 class="card-title">Profile Details</h5>
+                                        <h5 class="card-title">Profile Details</h5>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                        <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                                            <div class="col-lg-9 col-md-8"><?php echo "$_SESSION[admin_name]"; ?></div>
+                                        </div>
+
+
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Type</div>
+                                            <div class="col-lg-9 col-md-8">Admin</div>
+                                        </div>
+
+
                                     </div>
+                                    <!--  -->
 
-
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Type</div>
-                                        <div class="col-lg-9 col-md-8">Admin</div>
-                                    </div>
-
-
-                                </div>
-                                <!--  -->
+                                <?php
+                                }
+                                ?>
 
                                 <!-- Profile edit -->
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
