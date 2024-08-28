@@ -86,13 +86,10 @@ if (!isset($_SESSION['admin_name'])) {
                                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Add Category</button>
                                 </li>
 
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Category</button>
-                                </li>
+                                </li> -->
 
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Delete Category</button>
-                                </li>
                             </ul>
                             <!--  -->
 
@@ -146,106 +143,8 @@ if (!isset($_SESSION['admin_name'])) {
                                             <button type="submit" class="btn btn-primary" name="submit">Add Category</button>
                                         </div>
                                     </form>
-
-
                                 </div>
                                 <!--  -->
-
-                                <!-- Edit Category -->
-                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                                    <form>
-                                        <!-- Product image -->
-                                        <div class="row mb-3">
-                                            <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Product Image</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <img src="assets/img/profile-img.jpg" alt="product image">
-                                                <div class="pt-2">
-                                                    <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Name -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Name</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productName" type="text" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Size -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productSize" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Price -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Price</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productPrice" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Quantity -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Quantity</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productPrice" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Description  -->
-                                        <div class="row mb-3">
-                                            <label for="about" class="col-md-4 col-lg-3 col-form-label">Product Description</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <textarea name="about" class="form-control" id="about" style="height: 100px"></textarea>
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Update Products</button>
-                                        </div>
-                                    </form>
-
-                                </div>
-                                <!--  -->
-
-                                <!-- Delete Category -->
-                                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-
-                                        <!-- Product ID -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product ID</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productSize" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Delete Product</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
-
-                                </div>
-                                <!--  -->
-
-
-
                             </div><!-- End Bordered Tabs -->
 
                         </div>
@@ -255,32 +154,45 @@ if (!isset($_SESSION['admin_name'])) {
                 </div>
         </section>
 
-        <!-- Top Selling -->
+        <!-- Category Display -->
         <div class="col-12">
             <div class="card top-selling overflow-auto">
 
                 <div class="card-body pb-0">
-                    <h5 class="card-title">Added Products</h5>
+                    <h5 class="card-title">Added Categories</h5>
 
                     <table class="table table-borderless">
                         <thead>
                             <tr>
                                 <th scope="col">id</th>
                                 <th scope="col">image</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
+                                <th scope="col">Category Type</th>
+                                <th scope="col">Sub Category</th>
+                                <th scope="col">Remove</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>101</th>
-                                <th scope="row"><a href="#"><img src="../images/products/f1.jpg" alt=""></a></th>
-                                <td><a href="#" class="text-primary fw-bold">Linen Shirts</a></td>
-                                <td>₹ 64</td>
-                                <td class="fw-bold">124</td>
-                            </tr>
+                            <?php
+                            $selected_categories = mysqli_query($conn, "SELECT * FROM `product_sub_category`");
+                            if (mysqli_num_rows($selected_categories) > 0) {
+                                while ($row = mysqli_fetch_assoc($selected_categories)) {
+                            ?>
+                                    <tr>
+                                        <th><?php echo $row['sub_category_id']; ?></th>
+                                        <th scope="row"><img src="../uploaded_images/category/<?php echo $row['sub_category_image']; ?>" alt="Category Image not load" style="height: 70px; width: 70px;"></th>
+                                        <td><?php echo $row['category_id']; ?></td>
+                                        <td><?php echo $row['sub_category_name']; ?></td>
+                                        <td>
+                                            <a href="./add_category.php?delete=<?php echo $row['sub_category_id']; ?>" style="height: 50px;">
+                                                <i class='bx bx-message-square-x'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                            <?php
+                                };
+                            };
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -307,3 +219,33 @@ if (!isset($_SESSION['admin_name'])) {
 </body>
 
 </html>
+
+<!-- for delete sub categories -->
+<?php
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+
+    // Fetch the image file name associated with this subcategory
+    $result = mysqli_query($conn, "SELECT `sub_category_image` FROM `product_sub_category` WHERE `sub_category_id` = $id");
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $imageFileName = $row['sub_category_image'];
+
+        // Define the path to the image file
+        $imagePath = __DIR__ . "/../uploaded_images/category/" . $imageFileName;
+
+        // Delete the image file from the server
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+    }
+
+    // Delete the subcategory from the database
+    mysqli_query($conn, "DELETE FROM `product_sub_category` WHERE `sub_category_id` = $id") or die('Query Failed');
+
+    echo "<script>
+            location.replace('add_category.php');
+        </script>";
+}
+?>
