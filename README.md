@@ -1,3 +1,3 @@
 # college project
 
-currently working on UI.
+currently working on backend.
