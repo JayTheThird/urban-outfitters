@@ -164,11 +164,12 @@ if (!isset($_SESSION['admin_name'])) {
                     <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">image</th>
-                                <th scope="col">Category Type</th>
-                                <th scope="col">Sub Category</th>
-                                <th scope="col">Remove</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">IMAGE</th>
+                                <th scope="col">CATEGORY TYPE</th>
+                                <th scope="col">SUB CATEGORY</th>
+                                <th scope="col">EDIT</th>
+                                <th scope="col">REMOVE</th>
 
                             </tr>
                         </thead>
@@ -184,8 +185,13 @@ if (!isset($_SESSION['admin_name'])) {
                                         <td><?php echo $row['category_id']; ?></td>
                                         <td><?php echo $row['sub_category_name']; ?></td>
                                         <td>
+                                            <a href="./update_category.php?edit=<?php echo $row['sub_category_id']; ?>" style="height: 50px;">
+                                                <i class='bx bx-edit bx-sm'></i>
+                                            </a>
+                                        </td>
+                                        <td>
                                             <a href="./add_category.php?delete=<?php echo $row['sub_category_id']; ?>" style="height: 50px;">
-                                                <i class='bx bx-message-square-x'></i>
+                                                <i class='bx bx-message-square-x bx-sm'></i>
                                             </a>
                                         </td>
                                     </tr>
