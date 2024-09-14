@@ -86,47 +86,63 @@ if (!isset($_SESSION['admin_name'])) {
                                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Add Products</button>
                                 </li>
 
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Products</button>
-                                </li>
-
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Delete Products</button>
-                                </li>
                             </ul>
                             <!--  -->
 
                             <div class="tab-content pt-2">
                                 <!-- Add Products -->
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                    <form method="post">
+                                    <form method="post" action="add_products_impl.php" enctype="multipart/form-data">
                                         <!-- Product image -->
                                         <div class="row mb-3">
                                             <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Product Image</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <img src="assets/img/profile-img.jpg" alt="product image">
                                                 <div class="pt-2">
-                                                    <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                    <input type="file" name="product_image" id="product_image">
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--  -->
 
                                         <!-- Product Name -->
                                         <div class="row mb-3">
                                             <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Name</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="productName" type="text" class="form-control" id="fullName" value="">
+                                                <input name="product_name" type="text" class="form-control" id="fullName" value="">
+                                            </div>
+                                        </div>
+                                        <!--  -->
+
+                                        <!-- Category type -->
+                                        <div class="row mb-3">
+                                            <label for="category_type" class="col-md-4 col-lg-3 col-form-label">Category Type</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <select name="category_type" id="categoryType" class="form-control">
+                                                    <option value="">Select Category</option>
+                                                    <?php
+                                                    $category_select = "SELECT * FROM `product_sub_category`";
+                                                    $query = mysqli_query($conn, $category_select);
+
+                                                    while ($row = mysqli_fetch_assoc($query)) {
+                                                        $sub_category_id = $row['sub_category_id'];
+                                                        $sub_category_name = $row['sub_category_name'];
+
+                                                        echo "<option value=$sub_category_id>$sub_category_name</option>";
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <!--  -->
 
                                         <!-- Product Size -->
                                         <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
+                                            <label for="category_type" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="productSize" type="number" class="form-control" id="fullName" value="">
+                                                <select name="product_size[]" id="categoryType" class="form-control" multiple>
+                                                    <option value="Small">Small</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Large">Large</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <!--  -->
@@ -135,7 +151,7 @@ if (!isset($_SESSION['admin_name'])) {
                                         <div class="row mb-3">
                                             <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Price</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="productPrice" type="number" class="form-control" id="fullName" value="">
+                                                <input name="product_price" type="number" class="form-control" id="fullName" value="">
                                             </div>
                                         </div>
                                         <!--  -->
@@ -144,7 +160,7 @@ if (!isset($_SESSION['admin_name'])) {
                                         <div class="row mb-3">
                                             <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Quantity</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="productPrice" type="number" class="form-control" id="fullName" value="">
+                                                <input name="product_quantity" type="number" class="form-control" id="fullName" value="">
                                             </div>
                                         </div>
                                         <!--  -->
@@ -153,114 +169,17 @@ if (!isset($_SESSION['admin_name'])) {
                                         <div class="row mb-3">
                                             <label for="about" class="col-md-4 col-lg-3 col-form-label">Product Description</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <textarea name="about" class="form-control" id="about" style="height: 100px"></textarea>
+                                                <textarea name="product_description" class="form-control" id="about" style="height: 100px"></textarea>
                                             </div>
                                         </div>
                                         <!--  -->
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Add Products</button>
+                                            <button type="submit" name="submit" class="btn btn-primary">Add Products</button>
                                         </div>
                                     </form>
-
                                 </div>
                                 <!--  -->
-
-                                <!-- Edit Products -->
-                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                                    <form>
-                                        <!-- Product image -->
-                                        <div class="row mb-3">
-                                            <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Product Image</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <img src="assets/img/profile-img.jpg" alt="product image">
-                                                <div class="pt-2">
-                                                    <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Name -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Name</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productName" type="text" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Size -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productSize" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Price -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product Price</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productPrice" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Quantity -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Quantity</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productPrice" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <!-- Product Description  -->
-                                        <div class="row mb-3">
-                                            <label for="about" class="col-md-4 col-lg-3 col-form-label">Product Description</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <textarea name="about" class="form-control" id="about" style="height: 100px"></textarea>
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Update Products</button>
-                                        </div>
-                                    </form>
-
-                                </div>
-                                <!--  -->
-
-                                <!-- Delete Products -->
-                                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-
-                                        <!-- Product ID -->
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Product ID</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="productSize" type="number" class="form-control" id="fullName" value="">
-                                            </div>
-                                        </div>
-                                        <!--  -->
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Delete Product</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
-
-                                </div>
-                                <!--  -->
-
-
-
                             </div><!-- End Bordered Tabs -->
 
                         </div>

@@ -175,14 +175,20 @@ if (!isset($_SESSION['admin_name'])) {
                         </thead>
                         <tbody>
                             <?php
-                            $selected_categories = mysqli_query($conn, "SELECT * FROM `product_sub_category`");
+                            // 
+                            $selected_categories = mysqli_query($conn, "SELECT product_sub_category.*, product_category.category 
+                                            FROM product_sub_category 
+                                            JOIN product_category ON product_sub_category.category_id = product_category.category_id
+                                            WHERE product_sub_category.is_deleted = 0");
+
+
                             if (mysqli_num_rows($selected_categories) > 0) {
                                 while ($row = mysqli_fetch_assoc($selected_categories)) {
                             ?>
                                     <tr>
                                         <th><?php echo $row['sub_category_id']; ?></th>
                                         <th scope="row"><img src="../uploaded_images/category/<?php echo $row['sub_category_image']; ?>" alt="Category Image not load" style="height: 70px; width: 70px;"></th>
-                                        <td><?php echo $row['category_id']; ?></td>
+                                        <td><?php echo $row['category']; ?></td> <!-- Display category name instead of ID -->
                                         <td><?php echo $row['sub_category_name']; ?></td>
                                         <td>
                                             <a href="./update_category.php?edit=<?php echo $row['sub_category_id']; ?>" style="height: 50px;">
@@ -196,9 +202,10 @@ if (!isset($_SESSION['admin_name'])) {
                                         </td>
                                     </tr>
                             <?php
-                                };
-                            };
+                                }
+                            }
                             ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -247,8 +254,8 @@ if (isset($_GET['delete'])) {
         }
     }
 
-    // Delete the subcategory from the database
-    mysqli_query($conn, "DELETE FROM `product_sub_category` WHERE `sub_category_id` = $id") or die('Query Failed');
+    // Set is_deleted to 1 instead of deleting the row
+    mysqli_query($conn, "UPDATE `product_sub_category` SET `is_deleted` = 1 WHERE `sub_category_id` = $id") or die('Query Failed');
 
     echo "<script>
             location.replace('add_category.php');
