@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 15, 2024 at 07:43 AM
+-- Generation Time: Sep 15, 2024 at 01:25 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -67,7 +67,13 @@ INSERT INTO `products` (`product_id`, `sub_category_id`, `product_name`, `produc
 (1, 3, 'funki jeans', 900, 5, 'this is test 1', '1726377124-jeans-category.jpg', '2024-09-15', '[\"S\",\"L\"]', 1),
 (2, 3, 'funki jeans', 500, 5, 'this is test 2', '1726377604-jeans-category.jpg', '2024-09-15', '[\"S\",\"L\"]', 1),
 (3, 3, 'jeans', 600, 5, 'this is new test', '1726378152-jeans-category.jpg', '2024-09-15', '[\"S\",\"L\"]', 1),
-(4, 3, 'jeans', 500, 5, 'this is test', '1726378428-jeans-category.jpg', '2024-09-15', 'S', 0);
+(4, 3, 'jeans', 500, 5, 'this is test', '1726378428-jeans-category.jpg', '2024-09-15', 'S', 0),
+(5, 4, 'shirt', 900, 5, 'this is shirt', '1726396777-shirts-category.jpg', '2024-09-15', '[\"S\",\"M\",\"L\"]', 0),
+(6, 6, 'T-Shit', 600, 5, 'this is called t-shirt', '1726396974-tshirts-category.jpg', '2024-09-15', '[\"M\",\"L\"]', 0),
+(7, 4, 'Chinese Collar Shirt', 1299, 5, 'this is Chinese Collar', '1726398464-n1.jpg', '2024-09-15', '[\"M\",\"L\"]', 0),
+(8, 6, 'black t shirt', 500, 1, 'this is black color t shirt', '1726399321-n8.jpg', '2024-09-15', '[\"S\"]', 0),
+(9, 6, 'Hawaiian t shirt', 899, 5, 'this is hawaiian t shirt', '1726399376-f1.jpg', '2024-09-15', '[\"S\",\"M\"]', 0),
+(10, 3, 'cotton short', 700, 5, 'this is cotton short', '1726399456-n7.jpg', '2024-09-15', '[\"S\",\"M\"]', 0);
 
 -- --------------------------------------------------------
 
@@ -110,7 +116,8 @@ CREATE TABLE `product_sub_category` (
 INSERT INTO `product_sub_category` (`sub_category_id`, `category_id`, `sub_category_name`, `sub_category_image`, `date`, `is_deleted`) VALUES
 (3, 2, 'jeans', '1726376373-jeans-category.jpg', '2024-09-15', 0),
 (4, 1, 'shirts', '1726376385-shirts-category.jpg', '2024-09-15', 0),
-(5, 1, 'tshirts', '1726376398-tshirts-category.jpg', '2024-09-15', 1);
+(5, 1, 'tshirts', '1726376398-tshirts-category.jpg', '2024-09-15', 1),
+(6, 1, 'T-Shirt', '1726396942-tshirts-category.jpg', '2024-09-15', 0);
 
 -- --------------------------------------------------------
 
@@ -187,7 +194,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `product_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `product_category`
@@ -199,7 +206,7 @@ ALTER TABLE `product_category`
 -- AUTO_INCREMENT for table `product_sub_category`
 --
 ALTER TABLE `product_sub_category`
-  MODIFY `sub_category_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `sub_category_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`

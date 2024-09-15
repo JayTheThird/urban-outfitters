@@ -9,7 +9,7 @@ include_once("../config.php");
         <!-- Flex container for centering and wrapping items -->
         <div style="display: flex; align-items: center; justify-content: space-evenly; flex-wrap: wrap;">
             <?php
-            $category = "SELECT * FROM `product_sub_category`";
+            $category = "SELECT * FROM `product_sub_category` WHERE `is_deleted` = 0";
             $category_query = mysqli_query($conn, $category);
             if (mysqli_num_rows($category_query) > 0) {
                 while ($fetched_data = mysqli_fetch_assoc($category_query)) {
