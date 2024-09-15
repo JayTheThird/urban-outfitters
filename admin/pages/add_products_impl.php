@@ -1,14 +1,16 @@
 <?php
 include_once("../connection.php");
 include_once("../config.php");
+
 if (isset($_POST['submit'])) {
     $added_date = date("Y/m/d");
-    $product_name = $_POST['product_name'];
+    $product_name = mysqli_real_escape_string($conn, $_POST['product_name']);
     $sub_category_id = $_POST['category_type'];
     $product_price = $_POST['product_price'];
     $product_quantity = $_POST['product_quantity'];
-    $product_description = $_POST['product_description'];
-    $product_sizes = $_POST['product_size'];
+    $product_description = mysqli_real_escape_string($conn, $_POST['product_description']);
+    $product_sizes_json = json_encode($_POST['product_size']); // Convert sizes to JSON
+
 
     // Handle image upload
     $filename = '';
@@ -22,24 +24,38 @@ if (isset($_POST['submit'])) {
             mkdir(dirname($folder), 0777, true);
         }
 
+        // Move uploaded file
         if (move_uploaded_file($temp_name, $folder)) {
-            // Ensure all required fields are filled, including the category being selected
-            if (!empty($product_name) && !empty($sub_category_id) && $sub_category_id != '' && !empty($product_price) && !empty($product_quantity) && !empty($product_description)) {
+            // Ensure all required fields are filled
+            if (!empty($product_name) && !empty($sub_category_id) && !empty($product_price) && !empty($product_quantity) && !empty($product_description)) {
 
                 // Insert into products table
-                $add_product = "INSERT INTO products(sub_category_id, product_name, product_price, product_quantity, product_description, product_image, added_date) 
-                                VALUES ('$sub_category_id', '$product_name', '$product_price', '$product_quantity', '$product_description', '$filename', '$added_date')";
+                $add_product = "
+                    INSERT INTO products (
+                        sub_category_id, 
+                        product_name, 
+                        product_price, 
+                        product_quantity, 
+                        product_description, 
+                        product_image, 
+                        added_date, 
+                        product_sizes
+                    ) 
+                    VALUES (
+                        '$sub_category_id', 
+                        '$product_name', 
+                        '$product_price', 
+                        '$product_quantity', 
+                        '$product_description', 
+                        '$filename', 
+                        '$added_date', 
+                        '$product_sizes_json'
+                    )
+                    ";
+
                 $product_query = mysqli_query($conn, $add_product);
 
                 if ($product_query) {
-                    $product_id = mysqli_insert_id($conn); // Get the last inserted product ID
-
-                    // Insert each product size into the product_sizes table
-                    foreach ($product_sizes as $size) {
-                        $add_size = "INSERT INTO product_sizes(product_id, product_size) VALUES ('$product_id', '$size')";
-                        mysqli_query($conn, $add_size);
-                    }
-
                     echo "<script>
                         alert('Product added successfully!');
                         location.replace('add_products.php');

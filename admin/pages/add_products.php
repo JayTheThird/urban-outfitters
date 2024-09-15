@@ -67,7 +67,7 @@ if (!isset($_SESSION['admin_name'])) {
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                     <li class="breadcrumb-item">Users</li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item active">Add Products</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -119,7 +119,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                 <select name="category_type" id="categoryType" class="form-control">
                                                     <option value="">Select Category</option>
                                                     <?php
-                                                    $category_select = "SELECT * FROM `product_sub_category`";
+                                                    $category_select = "SELECT * FROM `product_sub_category` WHERE `is_deleted` = 0";
                                                     $query = mysqli_query($conn, $category_select);
 
                                                     while ($row = mysqli_fetch_assoc($query)) {
@@ -139,9 +139,9 @@ if (!isset($_SESSION['admin_name'])) {
                                             <label for="category_type" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <select name="product_size[]" id="categoryType" class="form-control" multiple>
-                                                    <option value="Small">Small</option>
-                                                    <option value="Medium">Medium</option>
-                                                    <option value="Large">Large</option>
+                                                    <option value="S">S</option>
+                                                    <option value="M">M</option>
+                                                    <option value="L">L</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -203,18 +203,41 @@ if (!isset($_SESSION['admin_name'])) {
                                 <th scope="col">image</th>
                                 <th scope="col">Product</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
+                                <th scope="col">Added Date</th>
+                                <th scope="col">EDIT</th>
+                                <th scope="col">REMOVE</th>
+
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>101</th>
-                                <th scope="row"><a href="#"><img src="../images/products/f1.jpg" alt=""></a></th>
-                                <td><a href="#" class="text-primary fw-bold">Linen Shirts</a></td>
-                                <td>₹ 64</td>
-                                <td class="fw-bold">124</td>
-                            </tr>
+                            <?php
+                            $product_display = mysqli_query($conn, "SELECT `product_id`, `product_image`, `product_name`, `product_price`, `added_date` FROM `products` WHERE `is_deleted` = 0");
+                            if (mysqli_num_rows($product_display) > 0) {
+                                while ($fetched_data =  mysqli_fetch_assoc($product_display)) {
+                            ?>
+                                    <tr>
+                                        <th><?php echo $fetched_data['product_id']; ?></th>
+                                        <th scope="row"><img src="../uploaded_images/product/<?php echo $fetched_data['product_image']; ?>" alt="Category Image not load" style="height: 70px; width: 70px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"></th>
+                                        <td><?php echo $fetched_data['product_name']; ?></td>
+                                        <td><?php echo $fetched_data['product_price']; ?></td>
+                                        <td><?php echo $fetched_data['added_date']; ?></td>
+                                        <td>
+                                            <a href="./update_products.php?edit=<?php echo $fetched_data['product_id']; ?>" style="height: 50px;">
+                                                <i class='bx bx-edit bx-sm'></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="./add_products.php?delete=<?php echo $fetched_data['product_id']; ?>" style="height: 50px;">
+                                                <i class='bx bx-message-square-x bx-sm'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                            <?php
+                                }
+                            }
+                            ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -241,3 +264,33 @@ if (!isset($_SESSION['admin_name'])) {
 </body>
 
 </html>
+
+<!-- for delete Products -->
+<?php
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+
+    // Fetch the image file name associated with this subcategory
+    $result = mysqli_query($conn, "SELECT `product_image` FROM `products` WHERE `product_id` = $id");
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $imageFileName = $row['product_image'];
+
+        // Define the path to the image file
+        $imagePath = __DIR__ . "/../uploaded_images/product/" . $imageFileName;
+
+        // Delete the image file from the server
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+    }
+
+    // Set is_deleted to 1 instead of deleting the row (updating the products table)
+    mysqli_query($conn, "UPDATE `products` SET `is_deleted` = 1 WHERE `product_id` = $id") or die('Query Failed');
+
+    echo "<script>
+            location.replace('add_products.php');
+        </script>";
+}
+?>

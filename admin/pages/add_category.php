@@ -67,7 +67,7 @@ if (!isset($_SESSION['admin_name'])) {
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                     <li class="breadcrumb-item">Users</li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item active">Add Category</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
