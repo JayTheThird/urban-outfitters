@@ -3,6 +3,12 @@ include_once("../connection.php");
 include_once("../config.php");
 session_start();
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require('../vendor/autoload.php');
+
 $success = true;
 $error = "Payment Failed";
 
@@ -50,13 +56,14 @@ if ($success) {
 
         if ($cart_query && $cart_query->num_rows > 0) {
             $cart_items = [];
+            $total = 0;
             while ($fetch_data = $cart_query->fetch_assoc()) {
-                $total = $fetch_data['Price'] * $fetch_data['Quantity'];
+                $item_total = $fetch_data['Price'] * $fetch_data['Quantity'];
+                $total += $item_total;
                 $cart_items[] = [
                     'name' => $fetch_data['Name'],
                     'quantity' => $fetch_data['Quantity'],
-                    'price' => $fetch_data['Price'] // Assuming you want price
-
+                    'price' => $fetch_data['Price']
                 ];
             }
 
@@ -76,7 +83,67 @@ if ($success) {
                 $stmt->bind_param("i", $user_id);
                 $stmt->execute();
 
-                echo "<script>location.replace('thankyou.php');</script>";
+                // Send an order confirmation email to the user
+                try {
+                    $mail = new PHPMailer(true);
+
+                    $mail->SMTPDebug = SMTP::DEBUG_OFF;
+                    $mail->isSMTP();
+                    $mail->Host       = 'smtp.gmail.com';
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = 'urbanoutfittersg25@gmail.com';
+                    $mail->Password   = 'neeaymsxupnfmlow';
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port       = 587;
+
+                    //Recipients
+                    $mail->setFrom('urbanoutfittersg25@gmail.com', "Urban Outfitter's");
+                    $mail->addAddress($email);
+
+                    // Email Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Order Placed Successfully';
+
+                    // Generate email body with CSS and order details
+                    $email_message_body = "
+                        <div style='font-family: Arial, sans-serif;'>
+                            <div style='background-color: #f4f4f4; padding: 20px;'>
+                                <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);'>
+                                    <h1 style='color: #333333; text-align: center;'>Thank you for your order!</h1>
+                                    <p style='font-size: 16px; color: #555555;'>Hello <strong>$first_name $last_name</strong>,</p>
+                                    <p style='font-size: 16px; color: #555555;'>Your order has been successfully placed. Here are the details:</p>
+                                    
+                                    <h2 style='color: #333333; border-bottom: 1px solid #ddd; padding-bottom: 10px;'>Order Details:</h2>
+                                    <p style='font-size: 16px; color: #555555;'><strong>Order ID:</strong> $razorpayOrderId</p>
+                                    <p style='font-size: 16px; color: #555555;'><strong>Payment ID:</strong> $razorpayPaymentId</p>
+                                    <p style='font-size: 16px; color: #555555;'><strong>Amount Paid:</strong> $$amount</p>
+                                    
+                                    <h2 style='color: #333333; border-bottom: 1px solid #ddd; padding-bottom: 10px;'>Shipping Address:</h2>
+                                    <p style='font-size: 16px; color: #555555;'>$address, $optional_address, $city, $state_name - $pin_code</p>
+                                    
+                                    <h2 style='color: #333333; border-bottom: 1px solid #ddd; padding-bottom: 10px;'>Items Ordered:</h2>
+                                    <ul style='font-size: 16px; color: #555555;'>";
+
+                    // Add items to the email body
+                    foreach ($cart_items as $item) {
+                        $email_message_body .= "<li>{$item['name']} - Quantity: {$item['quantity']} - Price: {$item['price']}</li>";
+                    }
+
+                    $email_message_body .= "</ul>
+                                </div>
+                            </div>
+                        </div>";
+
+                    // Set email body
+                    $mail->Body = $email_message_body;
+
+                    // Send the email
+                    $mail->send();
+
+                    echo "<script>location.replace('thankyou.php');</script>";
+                } catch (Exception $e) {
+                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                }
             } else {
                 echo "Error: Could not place order.";
             }
