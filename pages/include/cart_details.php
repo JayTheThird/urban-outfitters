@@ -2,20 +2,68 @@
 // Remove Product From Cart
 if (isset($_GET['remove_Product_From_Cart'])) {
   $remove_Product_Id = intval($_GET['remove_Product_From_Cart']);
-  mysqli_query($conn, "DELETE FROM `cart` WHERE `cart_id` = '$remove_Product_Id'");
-  echo "<script>location.replace('cart.php');</script>";
+
+  // First, retrieve the product details from the cart (to know what product to restore stock to)
+  $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE `cart_id` = '$remove_Product_Id'");
+  if ($cart_query && mysqli_num_rows($cart_query) > 0) {
+    $cart_row = mysqli_fetch_assoc($cart_query);
+    $product_name = $cart_row['Name'];
+    $cart_quantity = $cart_row['Quantity'];
+
+    // Fetch the product in the products table to update the quantity
+    $product_query = mysqli_query($conn, "SELECT * FROM `products` WHERE `product_name` = '$product_name'");
+    if ($product_query && mysqli_num_rows($product_query) > 0) {
+      $product_row = mysqli_fetch_assoc($product_query);
+      $current_stock = $product_row['product_quantity'];
+
+      // Restore the quantity back to the stock
+      $new_stock = $current_stock + $cart_quantity;
+      mysqli_query($conn, "UPDATE `products` SET `product_quantity` = $new_stock WHERE `product_name` = '$product_name'");
+    }
+
+    // Remove the product from the cart
+    mysqli_query($conn, "DELETE FROM `cart` WHERE `cart_id` = '$remove_Product_Id'");
+    echo "<script>location.replace('cart.php');</script>";
+  }
 }
 
 // Update Product Quantity
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cart_id']) && isset($_POST['quantity'])) {
   $cart_id = intval($_POST['cart_id']);
-  $quantity = intval($_POST['quantity']);
+  $new_quantity = intval($_POST['quantity']);
 
-  if ($quantity > 0) {
-    mysqli_query($conn, "UPDATE `cart` SET `Quantity` = '$quantity' WHERE `cart_id` = '$cart_id'");
+  if ($new_quantity > 0) {
+    // Retrieve the product details from the cart
+    $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE `cart_id` = '$cart_id'");
+    if ($cart_query && mysqli_num_rows($cart_query) > 0) {
+      $cart_row = mysqli_fetch_assoc($cart_query);
+      $product_name = $cart_row['Name'];
+      $previous_quantity = $cart_row['Quantity'];
+
+      // Fetch the product details from the products table to check the available stock
+      $product_query = mysqli_query($conn, "SELECT * FROM `products` WHERE `product_name` = '$product_name'");
+      if ($product_query && mysqli_num_rows($product_query) > 0) {
+        $product_row = mysqli_fetch_assoc($product_query);
+        $available_stock = $product_row['product_quantity'];
+
+        // Check if there is enough stock to update the quantity in the cart
+        if ($new_quantity <= ($available_stock + $previous_quantity)) {
+          // Update the stock in the products table
+          $stock_change = $previous_quantity - $new_quantity;
+          $new_stock = $available_stock + $stock_change;
+
+          // Update the product stock in the products table
+          mysqli_query($conn, "UPDATE `products` SET `product_quantity` = $new_stock WHERE `product_name` = '$product_name'");
+
+          // Update the quantity in the cart
+          mysqli_query($conn, "UPDATE `cart` SET `Quantity` = '$new_quantity' WHERE `cart_id` = '$cart_id'");
+          echo json_encode(['status' => 'success']);
+        } else {
+          echo json_encode(['status' => 'error', 'message' => 'Not enough stock available']);
+        }
+      }
+    }
   }
-
-  echo json_encode(['status' => 'success']);
   exit;
 }
 ?>

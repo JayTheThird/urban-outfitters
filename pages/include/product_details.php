@@ -11,6 +11,7 @@ if (isset($_GET['id'])) {
     $product_price = $row['product_price'];
     $product_description = $row['product_description'];
     $product_sizes = $row['product_sizes'];
+    $product_quantity = $row['product_quantity'];
 
     // Decode the product sizes JSON string
     $product_sizes_array = json_decode($product_sizes);
@@ -35,9 +36,10 @@ if (isset($_POST['addToCart'])) {
             $Product_ID = $product_id;
             $Product_Name = $product_name;
             $Product_Price = $product_price;
+
             $Product_Image = $product_image;
             $Product_Size = $_POST['product_size'];
-            $Product_Quantity = $_POST['productQuantity'];
+            $Product_Quantity = $_POST['productQuantity']; // The quantity the user wants to purchase
 
             // Check if the product already exists in the cart for the logged-in user
             $Select_Cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE `Name` = '$Product_Name' AND `user_id` = '$user_id'");
@@ -48,17 +50,35 @@ if (isset($_POST['addToCart'])) {
                         alert('Product already added to the cart');
                     </script>";
             } else {
-                // Insert the product into the cart for the logged-in user
-                $insert_Product = mysqli_query($conn, "INSERT INTO `cart`(`Name`, `Price`, `Image`, `Quantity`, `Size`, `user_id`) 
-                VALUES ('$Product_Name', '$Product_Price', '$Product_Image', '$Product_Quantity', '$Product_Size', '$user_id')");
+                // Check if the requested quantity exceeds the available stock
+                if ($Product_Quantity <= $product_quantity) {
+                    // Insert the product into the cart for the logged-in user
+                    $insert_Product = mysqli_query($conn, "INSERT INTO `cart`(`Name`, `Price`, `Image`, `Quantity`, `Size`, `user_id`) 
+                    VALUES ('$Product_Name', '$Product_Price', '$Product_Image', '$Product_Quantity', '$Product_Size', '$user_id')");
 
-                if ($insert_Product) {
-                    echo "<script>
-                            alert('Product added to cart');
-                        </script>";
+                    if ($insert_Product) {
+                        // Successfully added to cart, now update the product_quantity in the products table
+                        $new_quantity = $product_quantity - $Product_Quantity;
+                        $update_quantity = mysqli_query($conn, "UPDATE `products` SET `product_quantity` = $new_quantity WHERE `product_id` = $Product_ID");
+
+                        if ($update_quantity) {
+                            echo "<script>
+                                    alert('Product added to cart and quantity updated');
+                                </script>";
+                        } else {
+                            echo "<script>
+                                    alert('Error updating product quantity');
+                                </script>";
+                        }
+                    } else {
+                        echo "<script>
+                                alert('Error adding product to cart');
+                            </script>";
+                    }
                 } else {
+                    // User requested more than the available quantity
                     echo "<script>
-                            alert('Error adding product to cart');
+                            alert('Requested quantity exceeds available stock');
                         </script>";
                 }
             }
@@ -77,8 +97,6 @@ if (isset($_POST['addToCart'])) {
             </script>";
     }
 }
-
-
 
 ?>
 
@@ -118,21 +136,36 @@ if (isset($_POST['addToCart'])) {
                     <!-- product size -->
                     <input type="hidden" name="product_size" id="selectedSize">
 
+                    <!-- Display the original quantity -->
+                    <p>
+                        <?php if ($product_quantity > 0): ?>
+                            <strong class="text-primary h4"><?php echo "Quantity: $product_quantity"; ?></strong>
+                        <?php else: ?>
+                            <strong class="text-primary h4">Out of Stock</strong>
+                        <?php endif; ?>
+                    </p>
+
                     <!-- Quantity Selector -->
                     <div class="mb-5">
                         <div class="input-group mb-3" style="max-width: 120px;">
                             <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                                <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updateQuantity(-1)" min="1">−</button>
                             </div>
-                            <input type="text" class="form-control text-center" value="1" name="productQuantity" aria-label="Quantity" aria-describedby="button-addon1">
+                            <input type="text" class="form-control text-center" id="productQuantity" value="1" name="productQuantity" aria-label="Quantity" aria-describedby="button-addon1">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                                <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updateQuantity(1)" max="<?php echo $product_quantity; ?>">+</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Add to Cart Button -->
-                    <p><button type="submit" class="buy-now btn btn-sm btn-primary" name="addToCart">Add To Cart</button></p>
+                    <p>
+                        <?php if ($product_quantity > 0): ?>
+                            <button type="submit" class="buy-now btn btn-sm btn-primary" name="addToCart">Add To Cart</button>
+                        <?php else: ?>
+                            <button type="button" class="buy-now btn btn-sm btn-secondary" disabled>Add To Cart</button>
+                        <?php endif; ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -143,5 +176,28 @@ if (isset($_POST['addToCart'])) {
 <script>
     function updateSelectedSize(size) {
         document.getElementById('selectedSize').value = size;
+    }
+
+    // Get the maximum available quantity from the PHP value
+    let maxQuantity = <?php echo $product_quantity; ?>;
+
+    // Function to update the quantity
+    function updateQuantity(change) {
+        // Get the quantity input field
+        let quantityInput = document.getElementById('productQuantity');
+        let currentQuantity = parseInt(quantityInput.value);
+
+        // Calculate the new quantity based on the button clicked (+1 or -1)
+        let newQuantity = currentQuantity + change;
+
+        // Ensure the new quantity is within the valid range (1 to maxQuantity)
+        if (newQuantity < 1) {
+            newQuantity = 1; // Don't allow less than 1
+        } else if (newQuantity > maxQuantity) {
+            newQuantity = maxQuantity - 1; // Don't allow more than the available stock
+        }
+
+        // Update the input field with the new quantity
+        quantityInput.value = newQuantity;
     }
 </script>
