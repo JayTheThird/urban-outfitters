@@ -6,22 +6,23 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use FPDF;
 
 require('../vendor/autoload.php');
+require('../vendor/setasign/fpdf/fpdf.php'); // Make sure to include the FPDF file if not autoloaded
 
 // Function to generate the PDF invoice
+
 function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state, $pin_code, $cart_items)
 {
-    $pdf = new FPDF();
+    $pdf = new FPDF(); // Create an instance of FPDF
     $pdf->AddPage();
 
-    // Set a title with larger bold font
+    // Title
     $pdf->SetFont('Arial', 'B', 16);
     $pdf->Cell(190, 10, 'Invoice', 0, 1, 'C');
     $pdf->Ln(5);
 
-    // Customer and Order Information
+    // Order and Customer Info
     $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(100, 8, "Order ID: $orderId", 0, 0);
     $pdf->Cell(90, 8, "Payment ID: $paymentId", 0, 1, 'R');
@@ -54,16 +55,21 @@ function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $
         $pdf->Cell(50, 8, number_format($total_item_price, 2), 1, 1);
     }
 
-    // Final total amount
+    // Final total
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(160, 8, 'Total Amount:', 0, 0, 'R');
-    $pdf->Cell(30, 8, "₹ $amount", 0, 1, 'R');
+    $pdf->Cell(30, 8, "₹$amount", 0, 1, 'R');
 
-    // Save PDF to a file
+    // Footer
+    $pdf->SetY(-15);
+    $pdf->SetFont('Arial', 'I', 8);
+    $pdf->Cell(0, 10, 'Thank you for your business!', 0, 0, 'C');
+
+    // Save PDF to file
     $pdf_filename = "../admin/uploaded_images/invoices/invoice_$orderId.pdf";
     $pdf->Output($pdf_filename, 'F');
-    return $pdf_filename;  // Return the path to the PDF file
+    return $pdf_filename;
 }
 
 
@@ -84,61 +90,135 @@ function sendOrderConfirmationEmail($email, $first_name, $last_name, $razorpayOr
         $mail->setFrom('urbanoutfittersg25@gmail.com', "Urban Outfitter's");
         $mail->addAddress($email);
 
-        // Inline CSS styling for the email content
         $mail->isHTML(true);
         $mail->Subject = 'Order Placed Successfully';
         $mail->Body = "
-            <div style='line-height: 1.7; color: #8c92a0; font-weight: 300; font-size: 16px; font-family: Arial, sans-serif;'>
-                <h1 style='color: #4CAF50;'>Order Confirmation</h1>
-                <p>Thank you for your order. Your order details are as follows:</p>
-                <p><strong>Order ID:</strong> $razorpayOrderId</p>
-                <p><strong>Payment ID:</strong> $razorpayPaymentId</p>
-                <p><strong>Amount Paid:</strong> ₹$amount</p>
-                <p><strong>Customer Name:</strong> $first_name $last_name</p>
-                <p><strong>Shipping Address:</strong> $address, $optional_address, $city, $state_name - $pin_code</p>
-                <h2 style='color: #333;'>Items Ordered:</h2>
-                <table style='width: 100%; border-collapse: collapse;'>
-                    <tr style='background-color: #e6e7e9;'>
-                        <th style='border: 1px solid #ddd; padding: 8px;'>Item Name</th>
-                        <th style='border: 1px solid #ddd; padding: 8px;'>Quantity</th>
-                        <th style='border: 1px solid #ddd; padding: 8px;'>Price</th>
-                    </tr>";
+            <div style='font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;'>
+                <div style='max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);'>
+                    <h1 style='color: #333;'>Order Confirmation</h1>
+                    <p style='font-size: 16px;'>Thank you for your order, <strong>$first_name $last_name</strong></p>
+                    <p><strong>Order ID:</strong> $razorpayOrderId</p>
+                    <p><strong>Payment ID:</strong> $razorpayPaymentId</p>
+                    <p><strong>Amount Paid:</strong> ₹$amount</p>
+                    <h2 style='color: #666;'>Delivery Address:</h2>
+                    <p style='margin: 0;'>$address, $optional_address<br>$city, $state_name - $pin_code</p>
+                    <h2 style='color: #666;'>Items Ordered:</h2>
+                    <table style='border-collapse: collapse; width: 100%; margin-top: 10px;'>
+                        <thead>
+                            <tr style='background-color: #f2f2f2;'>
+                                <th style='border: 1px solid #ddd; padding: 10px; text-align: left;'>Item Name</th>
+                                <th style='border: 1px solid #ddd; padding: 10px; text-align: left;'>Quantity</th>
+                                <th style='border: 1px solid #ddd; padding: 10px; text-align: left;'>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
 
-        // Loop through the cart items and display them in the email
         foreach ($cart_items as $item) {
             $mail->Body .= "
                 <tr>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>{$item['name']}</td>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>{$item['quantity']}</td>
-                    <td style='border: 1px solid #ddd; padding: 8px;'>₹{$item['price']}</td>
+                    <td style='border: 1px solid #ddd; padding: 10px;'>{$item['name']}</td>
+                    <td style='border: 1px solid #ddd; padding: 10px;'>{$item['quantity']}</td>
+                    <td style='border: 1px solid #ddd; padding: 10px;'>₹{$item['price']}</td>
                 </tr>";
         }
 
         $mail->Body .= "
+                </tbody>
                 </table>
-                <p><strong>Total Amount Paid: ₹$amount</strong></p>
-                <p style='color: #000;'>Thank you for shopping with Urban Outfitter's!</p>
-            </div>";
+                <p style='font-size: 16px; font-weight: bold; margin-top: 10px;'><strong>Total:</strong> ₹$amount</p>
+            </div>
+        </div>";
 
-        // Attach PDF invoice
+        // Attach the PDF invoice
         $mail->addAttachment($pdf_filename);
 
-        // Send email
+        // Send the email
         $mail->send();
-        echo "Order confirmation email sent successfully!";
+        echo "Order confirmation email sent!";
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        echo "Mailer Error: {$mail->ErrorInfo}";
     }
 }
 
 
+// Store order with cart items as JSON
+function addOrderToDB(
+    $conn,
+    $user_id,
+    $first_name,
+    $last_name,
+    $address,
+    $optional_address,
+    $state_name,
+    $city,
+    $pin_code,
+    $email,
+    $phone,
+    $order_notes,
+    $razorpayOrderId,
+    $razorpayPaymentId,
+    $amount,
+    $date,
+    $order_status,
+    $cart_items
+) {
+    // Encode cart items to JSON format
+    $cart_json = json_encode($cart_items);
 
-// Payment processing
+    // Prepare SQL query with all the required fields including 'order_notes'
+    $order_query = "INSERT INTO orders (
+        user_id, first_name, last_name, address, optional_address, state, 
+        city, pin_code, email, phone, order_notes, razorpay_order_id, 
+        razorpay_payment_id, total_amount, cart_item, payment_date, order_status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    // Prepare the statement
+    $stmt = $conn->prepare($order_query);
+
+    if (!$stmt) {
+        throw new Exception("Prepare statement failed: " . $conn->error);
+    }
+
+    // Bind parameters to the prepared statement
+    $stmt->bind_param(
+        'issssssssssssdsss',
+        $user_id,
+        $first_name,
+        $last_name,
+        $address,
+        $optional_address,
+        $state_name,
+        $city,
+        $pin_code,
+        $email,
+        $phone,
+        $order_notes,
+        $razorpayOrderId,
+        $razorpayPaymentId,
+        $amount,
+        $cart_json,
+        $date,
+        $order_status
+    );
+
+    // Execute the statement
+    if (!$stmt->execute()) {
+        throw new Exception("Execution failed: " . $stmt->error);
+    }
+
+    // Return the ID of the inserted order
+    return $stmt->insert_id;
+}
+
+
+// Payment handling
 if (!empty($_POST['razorpay_payment_id'])) {
+    // Retrieve session data
     $first_name = $_SESSION['new_first_name'];
     $last_name = $_SESSION['new_last_name'];
     $address = $_SESSION['address'];
-    $optional_address = $_SESSION['optional_address'] ?? 'N/A';
+    $optional_address = isset($_SESSION['optional_address']) ? $_SESSION['optional_address'] :  "N/A";
+    $order_notes = isset($_SESSION['order_notes']) ? $_SESSION['order_notes'] : 'N/A';
     $state_name = $_SESSION['state_name'];
     $city = $_SESSION['city'];
     $pin_code = $_SESSION['pin_code'];
@@ -149,53 +229,62 @@ if (!empty($_POST['razorpay_payment_id'])) {
     $date = date('Y-m-d H:i:s');
     $amount = 0;
 
-    // Retrieve user information
     $user_email = $_SESSION['email'];
-    $stmt = $conn->prepare("SELECT `uid` FROM `users` WHERE `email` = ?");
+    $stmt = $conn->prepare("SELECT uid FROM users WHERE email = ?");
     $stmt->bind_param("s", $user_email);
+    $stmt->execute();
+    $user_id = $stmt->get_result()->fetch_assoc()['uid'];
+
+    $cart_items = [];
+    $stmt = $conn->prepare("SELECT * FROM cart WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result && $result->num_rows > 0) {
-        $user_id = $result->fetch_assoc()['uid'];
-
-        // Retrieve cart items
-        $stmt = $conn->prepare("SELECT * FROM `cart` WHERE `user_id` = ?");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $cart_query = $stmt->get_result();
-
-        if ($cart_query && $cart_query->num_rows > 0) {
-            $cart_items = [];
-            while ($row = $cart_query->fetch_assoc()) {
-                $item_total = $row['Price'] * $row['Quantity'];
-                $amount += $item_total;
-                $cart_items[] = [
-                    'name' => $row['Name'],
-                    'quantity' => $row['Quantity'],
-                    'price' => $row['Price']
-                ];
-            }
-
-            // Generate PDF invoice
-            $pdf_filename = generatePDFInvoice($razorpayOrderId, $razorpayPaymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state_name, $pin_code, $cart_items);
-
-            // Send order confirmation email
-            sendOrderConfirmationEmail($email, $first_name, $last_name, $razorpayOrderId, $razorpayPaymentId, $amount, $address, $optional_address, $city, $state_name, $pin_code, $cart_items, $pdf_filename);
-
-            // Clear cart
-            $stmt = $conn->prepare("DELETE FROM `cart` WHERE `user_id` = ?");
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-
-            // Redirect to thank you page
-            echo "<script>location.replace('thankyou.php');</script>";
-        } else {
-            echo "Error: No items found in the cart.";
-        }
-    } else {
-        echo "Error: User not found.";
+    while ($row = $result->fetch_assoc()) {
+        $amount += $row['Price'] * $row['Quantity'];
+        $cart_items[] = [
+            'name' => $row['Name'],
+            'quantity' => $row['Quantity'],
+            'price' => $row['Price']
+        ];
     }
+
+    // Add order to database
+    $order_id = addOrderToDB(
+        $conn,
+        $user_id,
+        $first_name,
+        $last_name,
+        $address,
+        $optional_address,
+        $state_name,
+        $city,
+        $pin_code,
+        $email,
+        $phone,
+        $order_notes,
+        $razorpayOrderId,
+        $razorpayPaymentId,
+        $amount,
+        $date,
+        'Successful',
+        $cart_items
+    );
+
+    // Generate PDF Invoice
+    $pdf_filename = generatePDFInvoice($order_id, $razorpayPaymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state_name, $pin_code, $cart_items);
+
+    // Send Confirmation Email with Invoice
+    sendOrderConfirmationEmail($email, $first_name, $last_name, $razorpayOrderId, $razorpayPaymentId, $amount, $address, $optional_address, $city, $state_name, $pin_code, $cart_items, $pdf_filename);
+
+    // Clear Cart after Successful Order
+    $stmt = $conn->prepare("DELETE FROM cart WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    // Redirect to thank you page
+    echo "<script>location.replace('thankyou.php');</script>";
 } else {
-    echo "Payment Failed";
+    echo "Payment failed or not completed!";
 }

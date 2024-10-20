@@ -53,8 +53,8 @@ if (isset($_POST['addToCart'])) {
                 // Check if the requested quantity exceeds the available stock
                 if ($Product_Quantity <= $product_quantity) {
                     // Insert the product into the cart for the logged-in user
-                    $insert_Product = mysqli_query($conn, "INSERT INTO `cart`(`Name`, `Price`, `Image`, `Quantity`, `Size`, `user_id`) 
-                    VALUES ('$Product_Name', '$Product_Price', '$Product_Image', '$Product_Quantity', '$Product_Size', '$user_id')");
+                    $insert_Product = mysqli_query($conn, "INSERT INTO `cart`(`Product_Id`,`Name`, `Price`, `Image`, `Quantity`, `Size`, `user_id`) 
+                    VALUES ('$Product_ID','$Product_Name', '$Product_Price', '$Product_Image', '$Product_Quantity', '$Product_Size', '$user_id')");
 
                     if ($insert_Product) {
                         // Successfully added to cart, now update the product_quantity in the products table
@@ -149,14 +149,15 @@ if (isset($_POST['addToCart'])) {
                     <div class="mb-5">
                         <div class="input-group mb-3" style="max-width: 120px;">
                             <div class="input-group-prepend">
-                                <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updateQuantity(-1)" min="1">−</button>
+                                <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="updateQuantity(-1)">−</button>
                             </div>
-                            <input type="text" class="form-control text-center" id="productQuantity" value="1" name="productQuantity" aria-label="Quantity" aria-describedby="button-addon1">
+                            <input type="text" class="form-control text-center" id="productQuantity" value="1" name="productQuantity" aria-label="Quantity" aria-describedby="button-addon1" oninput="validateQuantity()">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updateQuantity(1)" max="<?php echo $product_quantity; ?>">+</button>
+                                <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="updateQuantity(1)">+</button>
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Add to Cart Button -->
                     <p>
@@ -199,5 +200,18 @@ if (isset($_POST['addToCart'])) {
 
         // Update the input field with the new quantity
         quantityInput.value = newQuantity;
+    }
+
+    // Validate the quantity input field
+    function validateQuantity() {
+        let quantityInput = document.getElementById('productQuantity');
+        let currentQuantity = parseInt(quantityInput.value);
+
+        // Ensure the quantity is a number
+        if (isNaN(currentQuantity) || currentQuantity < 1) {
+            quantityInput.value = 1; // Set to minimum
+        } else if (currentQuantity > maxQuantity) {
+            quantityInput.value = maxQuantity; // Set to maximum
+        }
     }
 </script>
