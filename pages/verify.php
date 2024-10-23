@@ -12,7 +12,7 @@ require('../vendor/setasign/fpdf/fpdf.php'); // Make sure to include the FPDF fi
 
 // Function to generate the PDF invoice
 
-function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state, $pin_code, $cart_items)
+function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state, $pin_code, $cart_items, $razorpayOrderId)
 {
     $pdf = new FPDF(); // Create an instance of FPDF
     $pdf->AddPage();
@@ -27,7 +27,7 @@ function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $
     $pdf->Cell(100, 8, "Order ID: $orderId", 0, 0);
     $pdf->Cell(90, 8, "Payment ID: $paymentId", 0, 1, 'R');
     $pdf->Cell(100, 8, "Date: $date", 0, 0);
-    $pdf->Cell(90, 8, "Amount Paid: ₹$amount", 0, 1, 'R');
+    $pdf->Cell(90, 8, "Amount Paid: Rs $amount", 0, 1, 'R');
     $pdf->Ln(5);
 
     // Customer details
@@ -59,7 +59,7 @@ function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(160, 8, 'Total Amount:', 0, 0, 'R');
-    $pdf->Cell(30, 8, "₹$amount", 0, 1, 'R');
+    $pdf->Cell(30, 8, "Rs $amount", 0, 1, 'R');
 
     // Footer
     $pdf->SetY(-15);
@@ -67,7 +67,7 @@ function generatePDFInvoice($orderId, $paymentId, $date, $amount, $first_name, $
     $pdf->Cell(0, 10, 'Thank you for your business!', 0, 0, 'C');
 
     // Save PDF to file
-    $pdf_filename = "../admin/uploaded_images/invoices/invoice_$orderId.pdf";
+    $pdf_filename = "../admin/uploaded_images/invoices/invoice_$razorpayOrderId.pdf";
     $pdf->Output($pdf_filename, 'F');
     return $pdf_filename;
 }
@@ -273,7 +273,7 @@ if (!empty($_POST['razorpay_payment_id'])) {
     );
 
     // Generate PDF Invoice
-    $pdf_filename = generatePDFInvoice($order_id, $razorpayPaymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state_name, $pin_code, $cart_items);
+    $pdf_filename = generatePDFInvoice($order_id, $razorpayPaymentId, $date, $amount, $first_name, $last_name, $address, $optional_address, $city, $state_name, $pin_code, $cart_items, $razorpayOrderId);
 
     // Send Confirmation Email with Invoice
     sendOrderConfirmationEmail($email, $first_name, $last_name, $razorpayOrderId, $razorpayPaymentId, $amount, $address, $optional_address, $city, $state_name, $pin_code, $cart_items, $pdf_filename);

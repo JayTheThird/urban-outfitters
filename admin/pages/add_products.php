@@ -189,7 +189,7 @@ if (!isset($_SESSION['admin_name'])) {
                 </div>
         </section>
 
-        <!-- Top Selling -->
+        <!-- Added Products -->
         <div class="col-12">
             <div class="card top-selling overflow-auto">
 

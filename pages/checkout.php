@@ -172,17 +172,9 @@ include_once("../config.php");
                 </div>
 
                 <div class="form-group">
-                  <label for="c_country" class="text-black">State <span class="text-danger">*</span></label>
-                  <select id="c_country" class="form-control" name="state_name">
-                    <option value="1">Select a State</option>
-                    <option value="2">bangladesh</option>
-                    <option value="3">Algeria</option>
-                    <option value="4">Afghanistan</option>
-                    <option value="5">Ghana</option>
-                    <option value="6">Albania</option>
-                    <option value="7">Bahrain</option>
-                    <option value="8">Colombia</option>
-                    <option value="9">Dominican Republic</option>
+                  <label for="c_state" class="text-black">State <span class="text-danger">*</span></label>
+                  <select id="c_state" class="form-control" name="state_name">
+                    <option value="">Loading states...</option>
                   </select>
                 </div>
 
@@ -344,6 +336,30 @@ include_once("../config.php");
 
   <script src="../js/main.js"></script>
 
+  <!-- indian state api -->
+  <script>
+    // Fetch Indian states from an API on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch("https://cdn-api.co-vin.in/api/v2/admin/location/states")
+        .then(response => response.json())
+        .then(data => {
+          const stateDropdown = document.getElementById("c_state");
+          stateDropdown.innerHTML = '<option value="">Select a State</option>'; // Reset options
+
+          data.states.forEach(state => {
+            const option = document.createElement("option");
+            option.value = state.state_name;
+            option.textContent = state.state_name;
+            stateDropdown.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching states:", error);
+          document.getElementById("c_state").innerHTML =
+            '<option value="">Unable to load states</option>';
+        });
+    });
+  </script>
 
 
 </body>
