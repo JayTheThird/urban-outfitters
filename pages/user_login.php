@@ -154,6 +154,7 @@ if (isset($_POST["submit"])) {
         if ($password_verify) {
 
             // Storing values in session
+            $_SESSION['user_id'] = $account_details['uid'];
             $_SESSION['user_first_name'] = $account_details['user_first_name'];
             $_SESSION['user_last_name'] = $account_details['user_last_name'];
             $_SESSION['email'] = $account_details['email'];

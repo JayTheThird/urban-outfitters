@@ -286,5 +286,5 @@ if (!empty($_POST['razorpay_payment_id'])) {
     // Redirect to thank you page
     echo "<script>location.replace('thankyou.php');</script>";
 } else {
-    echo "Payment failed or not completed!";
+    echo "<script>location.replace('payment_failed.php');</script>";
 }

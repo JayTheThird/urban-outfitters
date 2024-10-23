@@ -1,3 +1,67 @@
+<style>
+    /* Hide the original radio button */
+    input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* Custom radio button */
+    input[type="radio"]+span {
+        display: inline-block;
+        width: 18px;
+        /* Adjust the size */
+        height: 18px;
+        /* Adjust the size */
+        margin-right: 10px;
+        border-radius: 50%;
+        border: 2px solid #7e57c2;
+        /* Border color */
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Checked state */
+    input[type="radio"]:checked+span {
+        background-color: #7e57c2;
+        /* Fill color when checked */
+        border-color: #7e57c2;
+    }
+
+    /* Inner circle for checked state */
+    input[type="radio"]:checked+span:before {
+        content: "";
+        width: 8px;
+        /* Adjust the inner circle size */
+        height: 8px;
+        /* Adjust the inner circle size */
+        background-color: white;
+        /* Inner white circle */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Style the label text next to the radio button */
+    label .d-inline-block {
+        color: #333;
+        font-size: 16px;
+        /* Adjust text size */
+        font-weight: 500;
+        margin-left: 5px;
+        /* Add spacing between radio and text */
+    }
+
+    label:hover input[type="radio"]+span {
+        border-color: #5e35b1;
+        /* Darker border on hover */
+    }
+</style>
+
 <?php
 
 if (isset($_GET['id'])) {
@@ -124,15 +188,17 @@ if (isset($_POST['addToCart'])) {
                     <div class="mb-1 d-flex">
                         <?php if (!empty($product_sizes_array)): ?>
                             <?php foreach ($product_sizes_array as $size): ?>
-                                <label class="d-flex mr-3 mb-3">
+                                <label class="d-flex mr-3 mb-3 align-items-center">
                                     <input type="radio" name="shop-sizes" class="mr-2" value="<?php echo $size; ?>" onchange="updateSelectedSize('<?php echo $size; ?>')">
-                                    <span class="d-inline-block text-black"><?php echo $size; ?></span>
+                                    <span></span> <!-- Custom styled radio button -->
+                                    <span class="d-inline-block text-black ml-2"><?php echo $size; ?></span> <!-- Text next to the button -->
                                 </label>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <p>No sizes available</p>
                         <?php endif; ?>
                     </div>
+
                     <!-- product size -->
                     <input type="hidden" name="product_size" id="selectedSize">
 
