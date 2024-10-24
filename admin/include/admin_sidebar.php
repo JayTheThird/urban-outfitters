@@ -4,7 +4,7 @@
 
         <!-- Dashboard -->
         <li class="nav-item">
-            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>" href="admin_index.php">
+            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'admin_index.php') ? 'active' : ''; ?>" href="admin_index.php">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>

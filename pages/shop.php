@@ -37,7 +37,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 mb-0">
-            <a href="index.html">home</a>
+            <a href="index.php">home</a>
             <span class="mx-2 mb-0">/</span>
             <strong class="text-black">shop</strong>
           </div>

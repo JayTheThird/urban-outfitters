@@ -356,30 +356,35 @@ if (isset($_POST['submit'])) {
                             </div>
                             <!--  -->
 
-                            <form action="" method="post">
-                                <!-- Order Status Type Update -->
-                                <div class="row mb-3">
-                                    <label for="order_status" class="col-md-4 col-lg-3 col-form-label">Order Status</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <select name="order_status" id="order_status" class="form-control" required>
-                                            <option value="">Select Status</option>
-                                            <option value="Active">Active</option>
-                                            <option value="Preparing">Preparing</option>
-                                            <option value="Shipped">Shipped</option>
-                                            <option value="Delivered">Delivered</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                        </select>
+                            <?php
+                            if ($order_status != 'Delivered') {
+                            ?>
+                                <form action="" method="post">
+                                    <!-- Order Status Type Update -->
+                                    <div class="row mb-3">
+                                        <label for="order_status" class="col-md-4 col-lg-3 col-form-label">Order Status</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <select name="order_status" id="order_status" class="form-control" required>
+                                                <option value="">Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Preparing">Preparing</option>
+                                                <option value="Shipped">Shipped</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!--  -->
+                                    <!--  -->
 
-                                <div class="text-center">
-                                    <button type="submit" name="submit" class="btn btn-primary">Update Order Status</button>
-                                </div>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit" class="btn btn-primary">Update Order Status</button>
+                                    </div>
 
-                            </form>
-
+                                </form>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>

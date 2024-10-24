@@ -7,17 +7,57 @@
 
     ?>
 
+  <style>
+      .btn-light {
+          background: transparent;
+          font-size: 18px;
+          line-height: 1;
+          padding: 0;
+      }
+  </style>
+
   <header class="site-navbar" role="banner">
       <div class="site-navbar-top">
           <div class="container">
               <div class="row align-items-center">
 
-                  <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-                      <form action="" class="site-block-top-search">
-                          <span class="icon icon-search2"></span>
-                          <input type="text" class="form-control border-0" placeholder="Search">
-                      </form>
-                  </div>
+                  <?php
+                    // $current_page = basename($_SERVER['PHP_SELF']);
+                    // if ($current_page == "shop.php") {
+                    ?>
+                      <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+                          <form action="shop.php" method="GET" class="site-block-top-search" id="searchForm">
+                              <span class="icon icon-search2"></span>
+                              <input
+                                  type="text"
+                                  name="search"
+                                  class="form-control border-0"
+                                  placeholder="Search"
+                                  value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                              <button
+                                  type="button"
+                                  class="btn btn-light border-0"
+                                  onclick="clearSearch()"
+                                  style="position: absolute; right: 10px; top: 10px; cursor: pointer;">
+                                  ✕
+                              </button>
+                          </form>
+                      </div>
+
+
+                  <?php
+                    // } else {
+                    ?>
+                      <!-- <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left"> -->
+                          <!-- <form action="" class="site-block-top-search">
+                              <span class="icon icon-search2"></span>
+                              <input type="text" class="form-control border-0" placeholder="Search">
+                          </form> -->
+                      <!-- </div> -->
+                  <?php
+                    // }
+                    ?>
+
 
                   <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                       <div class="site-logo">
@@ -85,3 +125,12 @@
           </div>
       </nav>
   </header>
+
+
+  <script>
+      function clearSearch() {
+          const searchInput = document.querySelector('input[name="search"]');
+          searchInput.value = ''; // Clear the input value
+          document.getElementById('searchForm').submit(); // Submit the form
+      }
+  </script>

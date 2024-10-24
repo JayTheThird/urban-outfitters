@@ -2,51 +2,36 @@
 include_once("../connection.php");
 include_once("../config.php");
 
-// Number of products per page
 $products_per_page = 6;
-
-// Get the current page number from the query string
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-// Calculate the offset for the SQL query
 $offset = ($current_page - 1) * $products_per_page;
 
-// Check for available sizes in the database
-$available_sizes_query = mysqli_query($conn, "SELECT DISTINCT `product_sizes` FROM `products` WHERE `is_deleted` = 0");
-$available_sizes = [];
-
-while ($row = mysqli_fetch_assoc($available_sizes_query)) {
-  // Assuming sizes are stored as a comma-separated string
-  $sizes = explode(',', $row['product_sizes']);
-  $available_sizes = array_merge($available_sizes, array_map('trim', $sizes));
+// Prepare search filter
+$search_filter = '';
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+  $search_term = mysqli_real_escape_string($conn, $_GET['search']);
+  $search_filter = " AND (`product_name` LIKE '%$search_term%' OR `product_description` LIKE '%$search_term%')";
 }
-
-// Remove duplicates
-$available_sizes = array_unique($available_sizes);
 
 // Prepare size filter
 $size_filter = '';
 if (isset($_GET['size']) && !empty($_GET['size'])) {
-  $sizes = $_GET['size']; // array of selected sizes
-  // Prepare the size filter with multiple conditions
-  $size_conditions = array();
-  foreach ($sizes as $size) {
-    $size_conditions[] = "`product_sizes` LIKE '%$size%'";
-  }
-  // Join conditions with OR, so products with any of the selected sizes are displayed
+  $sizes = $_GET['size'];
+  $size_conditions = array_map(function ($size) {
+    return "`product_sizes` LIKE '%$size%'";
+  }, $sizes);
   $size_filter = " AND (" . implode(" OR ", $size_conditions) . ")";
 }
 
-// Fetch the products for the current page, including size filter
-$fetched_products = mysqli_query(
-  $conn,
-  "SELECT `product_id`, `product_name`, `product_price`, `product_image`, `product_sizes` 
-    FROM `products` 
-    WHERE `is_deleted` = 0 $size_filter 
-    LIMIT $products_per_page OFFSET $offset"
-);
+// Fetch the products with search and size filters
+$query = "SELECT `product_id`, `product_name`, `product_price`, `product_image`, `product_sizes`
+          FROM `products`
+          WHERE `is_deleted` = 0 $search_filter $size_filter
+          LIMIT $products_per_page OFFSET $offset";
 
-// Check if any products exist
+$fetched_products = mysqli_query($conn, $query);
+
+// Check if products exist
 if (mysqli_num_rows($fetched_products) > 0) {
   while ($row = mysqli_fetch_assoc($fetched_products)) {
 ?>
