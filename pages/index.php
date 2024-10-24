@@ -6,6 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Favicons -->
+    <link href="../images/favicon.png" rel="icon">
+    <link href="../images/favicon.png" rel="apple-touch-icon">
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
     <link rel="stylesheet" href="../fonts/icomoon/style.css">
 
@@ -39,7 +43,7 @@
                         <div class="intro-text text-center text-md-left">
                             <p class="mb-2">Style is something each of us already has, all we need to do is find it. </p>
                             <p>
-                                <a href="#" class="btn btn-sm btn-primary">Shop Now</a>
+                                <a href="shop.php" class="btn btn-sm btn-primary">Shop Now</a>
                             </p>
                         </div>
                     </div>

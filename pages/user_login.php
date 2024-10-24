@@ -17,8 +17,8 @@ if (isset($_SESSION['user_first_name'], $_SESSION['contact_number'])) {
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="../admin/assets/img/favicon.png" rel="icon">
-    <link href="../admin/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../images/favicon.png" rel="icon">
+    <link href="../images/favicon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">

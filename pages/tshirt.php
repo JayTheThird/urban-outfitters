@@ -2,9 +2,13 @@
 <html lang="en">
 
 <head>
-  <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+  <title>UO | T-Shirt</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Favicons -->
+  <link href="../images/favicon.png" rel="icon">
+  <link href="../images/favicon.png" rel="apple-touch-icon">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
   <link rel="stylesheet" href="../fonts/icomoon/style.css">
@@ -54,16 +58,16 @@
                 <div class="float-md-left mb-4">
                   <h2 class="text-black h5">Shop All</h2>
                 </div>
-              
+
               </div>
             </div>
             <!--  -->
 
             <div class="row mb-5">
               <!-- tile 1 -->
-            <?php
-            include_once('./include/product_card.php');
-            ?>
+              <?php
+              include_once('./include/product_card.php');
+              ?>
               <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                 <div class="block-4 text-center border">
                   <figure class="block-4-image">
@@ -148,7 +152,7 @@
           </div>
 
           <div class="col-md-3 order-1 mb-5 mb-md-0">
-              <!-- filter -->
+            <!-- filter -->
             <div class="border p-4 rounded mb-4">
 
               <div class="mb-4">
