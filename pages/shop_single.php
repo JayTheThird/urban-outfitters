@@ -4,6 +4,14 @@ session_start();
 include_once("../connection.php");
 include_once("../config.php");
 
+if (isset($_GET['id'])) {
+  $product_id = $_GET['id'];
+  $product_query = "SELECT * FROM `products` WHERE `product_id` = $product_id";
+  $result = mysqli_query($conn, $product_query);
+  $row = mysqli_fetch_assoc($result);
+
+  $product_name = $row['product_name'];
+}
 
 ?>
 
@@ -45,11 +53,12 @@ include_once("../config.php");
     ?>
     <!--  -->
 
+
     <!-- navigation -->
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="shop.php">Shop</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Tank Top T-Shirt</strong></div>
+          <div class="col-md-12 mb-0"><a href="shop.php">Shop</a> <span class="mx-2 mb-0">/</span> <strong class="text-black"><?php echo $product_name; ?></strong></div>
         </div>
       </div>
     </div>

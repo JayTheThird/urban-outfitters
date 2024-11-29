@@ -29,7 +29,7 @@ function generatePDF($title, $headers, $data, $filename)
 
     // Table body
     $pdf->SetFont('Arial', '', 12);
-    $pdf->SetFillColor(245, 245, 245); 
+    $pdf->SetFillColor(245, 245, 245);
     $fill = false;
 
     foreach ($data as $row) {
@@ -38,7 +38,7 @@ function generatePDF($title, $headers, $data, $filename)
             $pdf->Cell($headers[$index]['width'], 10, $cell, 1, 0, $align, $fill);
         }
         $pdf->Ln();
-        $fill = !$fill; 
+        $fill = !$fill;
     }
 
     // Output the PDF to download
@@ -229,8 +229,8 @@ $conn->close();
             <h1>Reports</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item">reports</li>
+                    <li class="breadcrumb-item"><a href="Admin_index.php">Home</a></li>
+                    <li class="breadcrumb-item">Reports</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->

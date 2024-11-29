@@ -62,11 +62,10 @@ if (!isset($_SESSION['admin_name'])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Profile</h1>
+            <h1>Add Products</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item">Users</li>
+                    <li class="breadcrumb-item"><a href="admin_index.php">Home</a></li>
                     <li class="breadcrumb-item active">Add Products</li>
                 </ol>
             </nav>
@@ -138,11 +137,19 @@ if (!isset($_SESSION['admin_name'])) {
                                         <div class="row mb-3">
                                             <label for="category_type" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <select name="product_size[]" id="categoryType" class="form-control" multiple>
-                                                    <option value="S">S</option>
-                                                    <option value="M">M</option>
-                                                    <option value="L">L</option>
+                                                <!-- Category Selection -->
+                                                <select name="product_category" id="productCategory" class="form-control">
+                                                    <option value="">Select Category</option>
+                                                    <option value="top">Top Wear</option>
+                                                    <option value="bottom">Bottom Wear</option>
                                                 </select>
+                                                <br>
+                                                <!-- Size Selection -->
+                                                <select name="product_size[]" id="productSize" class="form-control" multiple>
+                                                    <!-- Options will be populated based on category selection -->
+                                                </select>
+
+
                                             </div>
                                         </div>
                                         <!--  -->
@@ -294,3 +301,73 @@ if (isset($_GET['delete'])) {
         </script>";
 }
 ?>
+
+<script>
+    document.getElementById('productCategory').addEventListener('change', function() {
+        const category = this.value;
+        const sizeSelect = document.getElementById('productSize');
+
+        // Clear existing options
+        sizeSelect.innerHTML = '';
+
+        // Define size options
+        const sizes = {
+            top: [{
+                    value: 'S',
+                    text: 'S'
+                },
+                {
+                    value: 'M',
+                    text: 'M'
+                },
+                {
+                    value: 'L',
+                    text: 'L'
+                },
+                {
+                    value: 'XL',
+                    text: 'XL'
+                },
+                {
+                    value: 'XXL',
+                    text: 'XXL'
+                }
+            ],
+            bottom: [{
+                    value: '28',
+                    text: '28'
+                },
+                {
+                    value: '30',
+                    text: '30'
+                },
+                {
+                    value: '32',
+                    text: '32'
+                },
+                {
+                    value: '34',
+                    text: '34'
+                },
+                {
+                    value: '36',
+                    text: '36'
+                },
+                {
+                    value: '38',
+                    text: '38'
+                }
+            ]
+        };
+
+        // Populate size options based on category
+        if (sizes[category]) {
+            sizes[category].forEach(function(size) {
+                const option = document.createElement('option');
+                option.value = size.value;
+                option.text = size.text;
+                sizeSelect.appendChild(option);
+            });
+        }
+    });
+</script>

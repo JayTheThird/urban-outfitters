@@ -69,7 +69,7 @@ if (!isset($_SESSION['admin_name'])) {
             <h1>Order</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="admin_index.php">Home</a></li>
                     <li class="breadcrumb-item active">order</li>
                 </ol>
             </nav>

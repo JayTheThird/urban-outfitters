@@ -2,7 +2,7 @@
 include_once("../connection.php");
 include_once("../config.php");
 
-$products_per_page = 6;
+$products_per_page = 9;
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($current_page - 1) * $products_per_page;
 

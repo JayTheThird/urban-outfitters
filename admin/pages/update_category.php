@@ -62,12 +62,12 @@ if (!isset($_SESSION['admin_name'])) {
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Profile</h1>
+            <h1>Update Sub Category</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item">Users</li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item"><a href="admin_index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="add_category.php">Add Category</a></li>
+                    <li class="breadcrumb-item active">Sub Category Update</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -211,11 +211,11 @@ if (isset($_POST['update'])) {
     $updated_sub_category_id = $_POST['updated_sub_category_id'];
     $updated_sub_category = $_POST['updated_sub_category'];
     $updated_category_type = $_POST['updated_category_type'];
-    $updated_date = date("Y/m/d"); 
+    $updated_date = date("Y/m/d");
 
     // Old image file name
-    $old_category_image_name = $_POST["old_category_image"]; 
-    $old_category_image_path = "../uploaded_images/category/" . $old_category_image_name; 
+    $old_category_image_name = $_POST["old_category_image"];
+    $old_category_image_path = "../uploaded_images/category/" . $old_category_image_name;
 
     // Initialize the filename variable with the old image name
     $filename = $old_category_image_name;
@@ -224,8 +224,8 @@ if (isset($_POST['update'])) {
     if (!empty($_FILES["updated_category_image"]["name"])) {
         // Generate a unique filename for the new image using the current time
         $filename = time() . '-' . $_FILES["updated_category_image"]["name"];
-        $temp_name = $_FILES["updated_category_image"]["tmp_name"]; 
-        $folder = "../uploaded_images/category/" . $filename; 
+        $temp_name = $_FILES["updated_category_image"]["tmp_name"];
+        $folder = "../uploaded_images/category/" . $filename;
 
 
         if (move_uploaded_file($temp_name, $folder)) {
