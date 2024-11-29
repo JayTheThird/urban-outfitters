@@ -125,6 +125,14 @@
                     <input type="checkbox" id="s_lg" name="size[]" value="L" class="mr-2 mt-1" <?php if (isset($_GET['size']) && in_array('L', $_GET['size'])) echo 'checked'; ?>>
                     <span class="text-black">L</span>
                   </label>
+                  <label for="s_lg" class="d-flex">
+                    <input type="checkbox" id="s_lg" name="size[]" value="XL" class="mr-2 mt-1" <?php if (isset($_GET['size']) && in_array('L', $_GET['size'])) echo 'checked'; ?>>
+                    <span class="text-black">XL</span>
+                  </label>
+                  <label for="s_lg" class="d-flex">
+                    <input type="checkbox" id="s_lg" name="size[]" value="XXL" class="mr-2 mt-1" <?php if (isset($_GET['size']) && in_array('L', $_GET['size'])) echo 'checked'; ?>>
+                    <span class="text-black">XXL</span>
+                  </label>
                 </div>
 
                 <!-- Apply Filter Button -->

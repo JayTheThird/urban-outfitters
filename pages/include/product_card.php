@@ -1,3 +1,17 @@
+<style>
+  .block-4-image .product-image {
+    width: 100%;
+    /* Ensures the image spans the container's width */
+    height: 300px;
+    /* Set a fixed height for uniformity */
+    object-fit: contain;
+    /* Ensures the image fills the area without distortion */
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+    /* Rounded top corners only */
+  }
+</style>
+
 <?php
 include_once("../connection.php");
 include_once("../config.php");
@@ -39,7 +53,7 @@ if (mysqli_num_rows($fetched_products) > 0) {
       <div class="block-4 text-center border">
         <figure class="block-4-image">
           <a href="shop_single.php?id=<?php echo $row['product_id']; ?>">
-            <img src="../admin/uploaded_images/product/<?php echo $row['product_image']; ?>" alt="Image placeholder" class="img-fluid">
+            <img src="../admin/uploaded_images/product/<?php echo $row['product_image']; ?>" alt="Image placeholder" class="img-fluid product-image">
           </a>
         </figure>
         <div class="block-4-text p-4">

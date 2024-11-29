@@ -23,9 +23,8 @@
                        </div>
                        <div class="col-md-6 col-lg-4">
                            <ul class="list-unstyled">
-                               <li><a href="#">Urban Jeans</a></li>
-                               <li><a href="#">Urban T Shirts</a></li>
-                               <li><a href="#">Urban Shirts</a></li>
+                               <li><a href="#">SHOP</a></li>
+
                            </ul>
                        </div>
                    </div>
@@ -68,7 +67,7 @@
                        Copyright &copy;<script data-cfasync="false" src="#"></script>
                        <script>
                            document.write(new Date().getFullYear());
-                       </script> All rights reserved | <a href="#" target="_blank" class="text-primary">Urban Outfitter's</a>
+                       </script> All rights reserved | <a href="#" target="_blank" class="text-primary">URBAN OUTFITTER'S</a>
 
                    </p>
                </div>

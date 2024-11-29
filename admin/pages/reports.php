@@ -14,7 +14,8 @@ require_once('/xampp/htdocs/urban-outfitters/vendor/setasign/fpdf/fpdf.php');
 function generatePDF($title, $headers, $data, $filename)
 {
     $pdf = new FPDF();
-    $pdf->AddPage();
+    // Change to A3 size (297mm x 420mm)
+    $pdf->AddPage('P', 'A3');
     $pdf->SetFont('Arial', 'B', 14);
 
     // Title
@@ -23,27 +24,31 @@ function generatePDF($title, $headers, $data, $filename)
     // Table headers
     $pdf->SetFont('Arial', 'B', 12);
     foreach ($headers as $header) {
-        $pdf->Cell($header['width'], 10, $header['label'], 1, 0, 'C');
+        // Set header background color
+        $pdf->SetFillColor(200, 220, 255); // Light blue background
+        $pdf->Cell($header['width'], 10, $header['label'], 1, 0, 'C', true); // Bold, centered, with background
     }
     $pdf->Ln();
 
     // Table body
     $pdf->SetFont('Arial', '', 12);
-    $pdf->SetFillColor(245, 245, 245);
-    $fill = false;
+    $pdf->SetFillColor(245, 245, 245); // Light gray for row alternation
+    $fill = false; // For alternating row colors
 
     foreach ($data as $row) {
         foreach ($row as $index => $cell) {
-            $align = isset($headers[$index]['align']) ? $headers[$index]['align'] : 'C';
+            $align = isset($headers[$index]['align']) ? $headers[$index]['align'] : 'C'; // Default center alignment
             $pdf->Cell($headers[$index]['width'], 10, $cell, 1, 0, $align, $fill);
         }
         $pdf->Ln();
-        $fill = !$fill;
+        $fill = !$fill; // Toggle the fill for alternate row colors
     }
 
     // Output the PDF to download
     $pdf->Output('D', $filename); // 'D' forces download of the file
 }
+
+
 
 // Reusable function to execute a query and return the result as an array
 function fetchData($query)
@@ -56,14 +61,19 @@ function fetchData($query)
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-// Order Report Logic
+// order report
 if (isset($_POST['pastDate']) && isset($_POST['presentDate'])) {
     $past_date = $_POST['pastDate'];
     $present_date = $_POST['presentDate'];
 
+    // Adjust the present date to include the full day (23:59:59)
+    $present_date_end = $present_date . ' 23:59:59';
+
+    // Modify the query to take the time into account
     $order_query = "SELECT `order_id`, `total_amount`, `cart_item`, `payment_date`, `order_status` 
                     FROM `orders` 
-                    WHERE `payment_date` BETWEEN '$past_date' AND '$present_date'";
+                    WHERE `payment_date` BETWEEN '$past_date' AND '$present_date_end'";
+
     $order_data = fetchData($order_query);
 
     // Parse cart items and format the data for the table
@@ -95,8 +105,56 @@ if (isset($_POST['pastDate']) && isset($_POST['presentDate'])) {
     ];
 
     // Generate the PDF
-    generatePDF('Order Report between ' . $past_date . ' and ' . $present_date, $order_headers, $order_table_data, 'Order_Report_' . $past_date . ' to ' . $present_date . '.pdf');
+    generatePDF('Order Report between ' . $past_date . ' and ' . $present_date . ' (full day)', $order_headers, $order_table_data, 'Order_Report_' . $past_date . ' to ' . $present_date . '.pdf');
 }
+
+// Order Report Logic
+if (isset($_POST['pastDate']) && isset($_POST['presentDate'])) {
+    $past_date = $_POST['pastDate'];
+    $present_date = $_POST['presentDate'];
+
+    // Adjust the present date to include the full day (23:59:59)
+    $present_date_end = $present_date . ' 23:59:59';
+
+    // Modify the query to take the time into account
+    $order_query = "SELECT `order_id`, `total_amount`, `cart_item`, `payment_date`, `order_status` 
+                    FROM `orders` 
+                    WHERE `payment_date` BETWEEN '$past_date' AND '$present_date_end'";
+
+    $order_data = fetchData($order_query);
+
+    // Parse cart items and format the data for the table
+    $order_table_data = [];
+    foreach ($order_data as $row) {
+        $cart_items = json_decode($row['cart_item'], true);
+        $cart_item_names = [];
+        if (is_array($cart_items)) {
+            foreach ($cart_items as $item) {
+                $cart_item_names[] = $item['name'] ?? '';
+            }
+        }
+        $order_table_data[] = [
+            $row['order_id'],
+            'Rs ' . number_format($row['total_amount'], 2),
+            implode(', ', $cart_item_names),
+            $row['payment_date'],
+            $row['order_status']
+        ];
+    }
+
+    // Define headers for the order report
+    $order_headers = [
+        ['label' => 'Order ID', 'width' => 20],
+        ['label' => 'Total Amount', 'width' => 30, 'align' => 'R'],
+        ['label' => 'Cart Items', 'width' => 70],
+        ['label' => 'Payment Date', 'width' => 40],
+        ['label' => 'Status', 'width' => 30]
+    ];
+
+    // Generate the PDF
+    generatePDF('Order Report between ' . $past_date . ' and ' . $present_date . ' (full day)', $order_headers, $order_table_data, 'Order_Report_' . $past_date . ' to ' . $present_date . '.pdf');
+}
+
 
 // Product Report Logic
 if (isset($_POST['productPastDate']) && isset($_POST['productPresentDate'])) {
@@ -279,6 +337,7 @@ $conn->close();
                                                 <input name="presentDate" type="date" class="form-control" id="presentDate" required max="<?php echo date('Y-m-d'); ?>">
                                             </div>
                                         </div>
+
 
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary">Generate Reports</button>

@@ -106,9 +106,9 @@
     <!-- Big Sale! -->
     <div class="site-section block-8" id="big-sale">
         <div class="container">
-            <div class="row justify-content-center  mb-5">
+            <div class="row justify-content-center mb-5">
                 <div class="col-md-7 site-section-heading text-center pt-4">
-                    <h2>Big Sale!</h2>
+                    <h2>Urban Outfitter's Big Sale announcement</h2>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -116,14 +116,22 @@
                     <a href="#"><img src="../images/blog_1.jpg" alt="Image placeholder" class="img-fluid rounded"></a>
                 </div>
                 <div class="col-md-12 col-lg-5 text-center pl-md-5">
-                    <h2><a href="#">50% less in all items</a></h2>
-                    <p class="post-meta mb-4">By <a href="#">Carl Smith</a> <span class="block-8-sep">&bullet;</span> September 3, 2018</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste dolor accusantium facere corporis ipsum animi deleniti fugiat. Ex, veniam?</p>
-                    <p><a href="#" class="btn btn-primary btn-sm">Shop Now</a></p>
+                    <h2><a href="#">Get 30% less in all items</a></h2>
+                    <p class="post-meta mb-4">
+                        By <a href="#">URBAN OUTFITTER'S</a>
+                    </p>
+                    <p>Get ready to grab the best deals of the season. </P>
+                    <P>The countdown is on!</p>
+
+                    <!-- Countdown Timer -->
+                    <p id="countdown" class="mb-4"></p>
+
+                    <!-- <p><a href="#" class="btn btn-primary btn-sm">Shop Now</a></p> -->
                 </div>
             </div>
         </div>
     </div>
+
     <!--  -->
 
     <!-- footers -->
@@ -144,5 +152,37 @@
     <script src="../js/main.js"></script>
 
 </body>
+
+<!-- Countdown Timer Script -->
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("December 31, 2024 00:00:00").getTime();
+
+    // Update the countdown every 1 second
+    var x = setInterval(function() {
+
+        // Get the current date and time
+        var now = new Date().getTime();
+
+        // Calculate the time remaining
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes, and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in the "countdown" element
+        document.getElementById("countdown").innerHTML = "Sale starts in: " + days + "d " + hours + "h " +
+            minutes + "m " + seconds + "s ";
+
+        // If the countdown is over, display a message
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "The sale is live!";
+        }
+    }, 1000);
+</script>
 
 </html>

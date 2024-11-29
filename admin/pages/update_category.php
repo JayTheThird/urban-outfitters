@@ -130,12 +130,12 @@ if (!isset($_SESSION['admin_name'])) {
                                                     </div>
                                                     <!--  -->
 
-                                                    <!-- Category type -->
+                                                    <!-- Category Type -->
                                                     <div class="row mb-3">
                                                         <label for="category_type" class="col-md-4 col-lg-3 col-form-label">Category Type</label>
                                                         <div class="col-md-8 col-lg-9">
                                                             <select name="updated_category_type" id="categoryType" class="form-control">
-                                                                <option selected>Select Category</option>
+                                                                <option disabled>Select Category</option>
                                                                 <?php
                                                                 $category_select = "SELECT * FROM `product_category`";
                                                                 $query = mysqli_query($conn, $category_select);
@@ -143,14 +143,16 @@ if (!isset($_SESSION['admin_name'])) {
                                                                 while ($row = mysqli_fetch_assoc($query)) {
                                                                     $category_Id  = $row['category_id'];
                                                                     $category = $row['category'];
-
-                                                                    echo " <option value=$category_Id>$category</option>";
+                                                                    // Check if this category matches the selected one
+                                                                    $selected = ($category_Id == $fetched_data['category_id']) ? 'selected' : '';
+                                                                    echo "<option value='$category_Id' $selected>$category</option>";
                                                                 }
                                                                 ?>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <!--  -->
+
 
                                                     <!-- Sub category type -->
                                                     <div class="row mb-3">

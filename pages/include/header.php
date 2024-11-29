@@ -25,35 +25,35 @@
                     // $current_page = basename($_SERVER['PHP_SELF']);
                     // if ($current_page == "shop.php") {
                     ?>
-                      <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-                          <form action="shop.php" method="GET" class="site-block-top-search" id="searchForm">
-                              <span class="icon icon-search2"></span>
-                              <input
-                                  type="text"
-                                  name="search"
-                                  class="form-control border-0"
-                                  placeholder="Search"
-                                  value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                              <button
-                                  type="button"
-                                  class="btn btn-light border-0"
-                                  onclick="clearSearch()"
-                                  style="position: absolute; right: 10px; top: 10px; cursor: pointer;">
-                                  ✕
-                              </button>
-                          </form>
-                      </div>
+                  <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+                      <form action="shop.php" method="GET" class="site-block-top-search" id="searchForm">
+                          <span class="icon icon-search2"></span>
+                          <input
+                              type="text"
+                              name="search"
+                              class="form-control border-0"
+                              placeholder="Search"
+                              value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                          <button
+                              type="button"
+                              class="btn btn-light border-0"
+                              onclick="clearSearch()"
+                              style="position: absolute; right: 10px; top: 10px; cursor: pointer;">
+                              ✕
+                          </button>
+                      </form>
+                  </div>
 
 
                   <?php
                     // } else {
                     ?>
-                      <!-- <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left"> -->
-                          <!-- <form action="" class="site-block-top-search">
+                  <!-- <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left"> -->
+                  <!-- <form action="" class="site-block-top-search">
                               <span class="icon icon-search2"></span>
                               <input type="text" class="form-control border-0" placeholder="Search">
                           </form> -->
-                      <!-- </div> -->
+                  <!-- </div> -->
                   <?php
                     // }
                     ?>
@@ -112,12 +112,12 @@
                                         } ?>"><a href="tshirt.php">Urban T Shirts</a></li>
                       </ul>
                   </li>
-                  <li><a href="#big-sale">Big Sale!</a></li>
                   <li class="<?php if ($current_page == 'shop.php') {
                                     echo 'active';
                                 } ?>"><a href="shop.php">Shop</a></li>
+                  <li><a href="#big-sale">Big Sale!</a></li>
                   <li><a href="#">Catalogue</a></li>
-                  <li><a href="#featured-products">New Arrivals</a></li>
+                  <li><a href="#featured-products">Featured Products</a></li>
                   <li class="<?php if ($current_page == 'contact.php') {
                                     echo 'active';
                                 } ?>"><a href="contact.php">Contact</a></li>

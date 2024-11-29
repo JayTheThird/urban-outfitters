@@ -140,7 +140,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                         <label for="category_type" class="col-md-4 col-lg-3 col-form-label">Category Type</label>
                                                         <div class="col-md-8 col-lg-9">
                                                             <select name="updated_category_type" id="categoryType" class="form-control">
-                                                                <option selected>Select Category</option>
+                                                                <option disabled>Select Category</option>
                                                                 <?php
                                                                 $category_select = "SELECT * FROM `product_sub_category` WHERE `is_deleted` = 0";
                                                                 $query = mysqli_query($conn, $category_select);
@@ -148,10 +148,13 @@ if (!isset($_SESSION['admin_name'])) {
                                                                 while ($row = mysqli_fetch_assoc($query)) {
                                                                     $sub_category_id = $row['sub_category_id'];
                                                                     $sub_category_name = $row['sub_category_name'];
-                                                                    echo "<option value=$sub_category_id>$sub_category_name</option>";
+                                                                    // Check if this category matches the selected category
+                                                                    $selected = ($sub_category_id == $fetched_data['sub_category_id']) ? 'selected' : '';
+                                                                    echo "<option value='$sub_category_id' $selected>$sub_category_name</option>";
                                                                 }
                                                                 ?>
                                                             </select>
+
                                                         </div>
                                                     </div>
                                                     <!--  -->
@@ -161,18 +164,48 @@ if (!isset($_SESSION['admin_name'])) {
                                                         <label for="product_size" class="col-md-4 col-lg-3 col-form-label">Product Size</label>
                                                         <div class="col-md-8 col-lg-9">
                                                             <!-- Category Selection -->
-                                                            <select name="product_category" id="productCategory" class="form-control">
-                                                                <option value="">Select Category</option>
-                                                                <option value="top">Top Wear</option>
-                                                                <option value="bottom">Bottom Wear</option>
-                                                            </select>
-                                                            <br>
-                                                            <!-- Size Selection -->
-                                                            <select name="product_size[]" id="productSize" class="form-control" multiple>
-                                                                <!-- Options will be populated based on category selection -->
+                                                            <select name="updated_product_size[]" id="productSize" class="form-control" multiple>
+                                                                <?php
+                                                                // Fetch the sizes from the database as an array
+                                                                $selected_sizes = json_decode($fetched_data['product_sizes'], true); // Decode JSON if it's stored as JSON format
+                                                                if (!$selected_sizes) {
+                                                                    $selected_sizes = explode(',', $fetched_data['product_sizes']); // Fallback if it's a comma-separated string
+                                                                }
+
+                                                                // Define available sizes for top wear
+                                                                $top_sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+                                                                // Define available sizes for bottom wear
+                                                                $bottom_sizes = ['28', '30', '32', '34', '36', '38'];
+
+                                                                // Display top sizes
+                                                                echo "<optgroup label='Top Wear'>";
+                                                                foreach ($top_sizes as $size) {
+                                                                    // Check if the size was selected previously
+                                                                    $is_selected = in_array($size, $selected_sizes) ? 'selected' : '';
+                                                                    echo "<option value='$size' $is_selected>$size</option>";
+                                                                }
+                                                                echo "</optgroup>";
+
+                                                                // Display bottom sizes
+                                                                echo "<optgroup label='Bottom Wear'>";
+                                                                foreach ($bottom_sizes as $size) {
+                                                                    // Check if the size was selected previously
+                                                                    $is_selected = in_array($size, $selected_sizes) ? 'selected' : '';
+                                                                    echo "<option value='$size' $is_selected>$size</option>";
+                                                                }
+                                                                echo "</optgroup>";
+                                                                ?>
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <!--  -->
+                                                    <?php
+                                                    var_dump($fetched_data['product_sizes']);
+
+                                                    ?>
+                                                    <!--  -->
+
                                                     <!--  -->
 
                                                     <!-- Product Price -->
@@ -213,7 +246,8 @@ if (!isset($_SESSION['admin_name'])) {
                                     ?>
                                 </div>
                                 <!--  -->
-                            </div><!-- End Bordered Tabs -->
+                            </div>
+                            <!--  -->
 
 
                         </div>
@@ -254,7 +288,7 @@ if (isset($_POST['update'])) {
     $updated_product_name = $_POST['updated_product_name'];
     $updated_category_type = $_POST['updated_category_type'];
     $updated_product_price = $_POST['updated_product_price'];
-    $updated_product_size = implode(',', $_POST['updated_product_size']); // Convert array to comma-separated string
+    $updated_product_size = json_encode($_POST['updated_product_size']); // Convert array to JSON
     $updated_product_quantity = $_POST['updated_product_quantity'];
     $updated_product_description = $_POST['updated_product_description'];
     $updated_date = date("Y/m/d");
@@ -286,17 +320,15 @@ if (isset($_POST['update'])) {
 
     // Update product details in the database
     $update_product = mysqli_query($conn, "UPDATE `products` SET 
-    `sub_category_id`='$updated_category_type',
-    `product_name`='$updated_product_name',
-    `product_image`='$filename',
-    `product_price`='$updated_product_price',
-    `product_sizes`='$updated_product_size',
-    `product_quantity`='$updated_product_quantity',
-    `product_description`='$updated_product_description',
-    `added_date`='$updated_date'  /* Use 'added_date' instead of 'updated_date' */
-    WHERE `product_id`='$updated_product_id'");
-
-
+        `sub_category_id`='$updated_category_type',
+        `product_name`='$updated_product_name',
+        `product_image`='$filename',
+        `product_price`='$updated_product_price',
+        `product_sizes`='$updated_product_size', -- JSON data
+        `product_quantity`='$updated_product_quantity',
+        `product_description`='$updated_product_description',
+        `added_date`='$updated_date'
+        WHERE `product_id`='$updated_product_id'");
 
     // Check if the update was successful
     if ($update_product) {
@@ -320,60 +352,16 @@ if (isset($_POST['update'])) {
 
         // Define size options
         const sizes = {
-            top: [{
-                    value: 'S',
-                    text: 'S'
-                },
-                {
-                    value: 'M',
-                    text: 'M'
-                },
-                {
-                    value: 'L',
-                    text: 'L'
-                },
-                {
-                    value: 'XL',
-                    text: 'XL'
-                },
-                {
-                    value: 'XXL',
-                    text: 'XXL'
-                }
-            ],
-            bottom: [{
-                    value: '28',
-                    text: '28'
-                },
-                {
-                    value: '30',
-                    text: '30'
-                },
-                {
-                    value: '32',
-                    text: '32'
-                },
-                {
-                    value: '34',
-                    text: '34'
-                },
-                {
-                    value: '36',
-                    text: '36'
-                },
-                {
-                    value: '38',
-                    text: '38'
-                }
-            ]
+            top: ['S', 'M', 'L', 'XL', 'XXL'],
+            bottom: ['28', '30', '32', '34', '36', '38']
         };
 
         // Populate size options based on category
         if (sizes[category]) {
             sizes[category].forEach(function(size) {
                 const option = document.createElement('option');
-                option.value = size.value;
-                option.text = size.text;
+                option.value = size;
+                option.text = size;
                 sizeSelect.appendChild(option);
             });
         }
