@@ -36,11 +36,11 @@
         <!--  -->
 
         <!-- Returns/Replace Products -->
-        <li class="nav-item">
-            <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'returns_replace.php') ? 'active' : ''; ?>" href="returns_replace.php">
-                <i class='bx bx-rotate-left'></i><span>Returns/Replace Products</span></i>
-            </a>
-        </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'returns_replace.php') ? 'active' : ''; ?>" href="returns_replace.php">
+                    <i class='bx bx-rotate-left'></i><span>Returns/Replace Products</span></i>
+                </a>
+            </li> -->
         <!--  -->
 
         <!-- Reports -->

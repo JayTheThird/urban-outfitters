@@ -98,7 +98,7 @@
                   <li class="<?php if ($current_page == 'index.php') {
                                     echo 'active';
                                 } ?>"><a href="index.php">Home</a></li>
-                  <li class="has-children">
+                  <!-- <li class="has-children">
                       <a href="#category">Category</a>
                       <ul class="dropdown">
                           <li class="<?php if ($current_page == 'jeans.php') {
@@ -111,12 +111,12 @@
                                             echo 'active';
                                         } ?>"><a href="tshirt.php">Urban T Shirts</a></li>
                       </ul>
-                  </li>
+                  </li> -->
                   <li class="<?php if ($current_page == 'shop.php') {
                                     echo 'active';
                                 } ?>"><a href="shop.php">Shop</a></li>
                   <li><a href="#big-sale">Big Sale!</a></li>
-                  <li><a href="#">Catalogue</a></li>
+                  <!-- <li><a href="#">Catalogue</a></li> -->
                   <li><a href="#featured-products">Featured Products</a></li>
                   <li class="<?php if ($current_page == 'contact.php') {
                                     echo 'active';
